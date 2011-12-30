@@ -1,10 +1,9 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "units/version"
 
 Gem::Specification.new do |s|
   s.name        = "units"
-  s.version     = Units::VERSION
+  s.version     = '0'
   s.authors     = ["Brandon Fosdick"]
   s.email       = ["bfoz@bfoz.net"]
   s.homepage    = ""
