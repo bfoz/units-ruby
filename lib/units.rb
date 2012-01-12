@@ -5,9 +5,18 @@ end
 class Units
     attr_reader :units	# Returns the units hash
 
+    PREFIXES = {
+	:yocto => -24,	:zepto => -21,	:atto  => -18,	:femto => -15,
+	:pico  => -12,	:nano  =>  -9,	:micro =>  -6,	:milli =>  -3,
+	:centi =>  -2,	:deci  =>  -1,	:deca  =>   1,	:hecto =>   2,
+	:kilo  =>   3,	:mega  =>   6,	:giga  =>   9,	:tera  =>  12,
+	:peta  =>  15,	:exa   =>  18,	:zetta =>  21,	:yotta =>  24,
+    }
     UNITS = [:meter, :inch]
+
     BASE_CAPTURE = '(?<base>' + UNITS.each {|u| u.to_s }.join('|') + ')'
-    PARSER_EXP = Regexp.new(BASE_CAPTURE+'(s|es)?')
+    PREFIX_CAPTURE = '(?<prefix>' + PREFIXES.keys.each {|u| u.to_s }.join('|') + ')?'
+    PARSER_EXP = Regexp.new('\A'+PREFIX_CAPTURE+BASE_CAPTURE+'(s|es)?')
 
     def self.is_valid_unit?(s)
 	m = PARSER_EXP.match(s.is_a?(String) ? s : s.to_s)
@@ -16,7 +25,12 @@ class Units
 
     def self.parse_symbol(s)
 	m = PARSER_EXP.match(s.is_a?(String) ? s : s.to_s)
-	(m and UNITS.include?( m[:base].to_sym )) ? m[:base].to_sym : nil
+	if m and UNITS.include?(m[:base].to_sym)
+	    names = m.names.map {|n| n.to_sym}
+	    Hash[*names.zip(m.captures).flatten]
+	else
+	    nil
+	end
     end
 
     def initialize(*args)
@@ -35,11 +49,20 @@ class Units
 	# Remove any keys with value == 0
 	args = args.select {|key, value| value != 0}
 
-	# Check that all keys are valid units
-	raise UnitsError, "Invalid Units" if args.select! {|k| Units.is_valid_unit?(k)}
+	# Check that all keys are valid units and parse them
+	prefix = args[:prefix] ? args.delete(:prefix) : 0
+	args = args.inject({}) do |h,(k,v)|
+	    raise UnitsError, "Invalid Units" unless parsed = Units.parse_symbol(k)
+	    h[parsed[:base]] = v
+	    prefix += PREFIXES[parsed[:prefix]] if parsed[:prefix]
+	    h
+	end
 
 	# Can't have units without any units
 	raise ArgumentError, "Empty units" if args.empty?
+
+	# Restore the :prefix key if it's non-zero
+	args[:prefix] = prefix if prefix != 0
 
 	# Everything checked out, so use the new units hash
 	@units = args
@@ -221,7 +244,6 @@ end
 module NumericMixin
     def method_missing(id, *args, &block)
 	if Units.is_valid_unit?(id)
-	    id = Units.parse_symbol(id)
 	    units = Units.new(args.empty? ? id : {id => args[0]})
 
 	    # Float and Fixnum need to be handled specially because they're

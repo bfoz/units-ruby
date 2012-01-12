@@ -9,9 +9,15 @@ class UnitsTest < Test::Unit::TestCase
 	units_es = Units::UNITS.map {|u| (u.to_s + 'es').to_sym }
 	(units_s + units_es).each {|u| assert(Units.is_valid_unit?(u)) }
     end
+    must "accept valid prefixed units" do
+	all = Units::UNITS.map {|u| Units::PREFIXES.keys.map {|p| p.to_s + u.to_s } }
+	all.flatten.each {|u| assert(Units.is_valid_unit?(u.to_sym)) }
+    end
     # Also tests equality
     must "accept valid units hash" do
 	assert_equal(Units.new({:meters => 1}), Units.new(:meters => 1))
+    end
+    must "accept valid units hashification" do
 	# Test hashification
 	assert_equal(Units.new({:meters => 1, :inches => 1}),
 		     Units.new(:meters => 1, :inches => 1))
@@ -29,6 +35,9 @@ class UnitsTest < Test::Unit::TestCase
 
     must "reject invalid units" do
 	assert(! Units.is_valid_unit?(:foo) )
+    end
+    must "reject invalid prefix" do
+	assert(! Units.is_valid_unit?(:foometer) )
     end
 
     must "reject nil units" do
