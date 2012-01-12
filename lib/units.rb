@@ -12,7 +12,42 @@ class Units
 	:kilo  =>   3,	:mega  =>   6,	:giga  =>   9,	:tera  =>  12,
 	:peta  =>  15,	:exa   =>  18,	:zetta =>  21,	:yotta =>  24,
     }
-    UNITS = [:meter, :inch]
+    
+    # http://en.wikipedia.org/wiki/International_System_of_Units
+    SI_UNITS = [:meter, :gram, :second, :ampere, :kelvin, :candela, :mole]
+    SI_DERIVED = [
+	:hertz,	:radian,    :steradian,	:newton,    :pascal,	:joule,
+	:watt,	:coulomb,   :volt,	:farad,	    :ohm,	:siemens,
+	:weber,	:tesla,	    :henry,	:celsius,   :lumen,	:lux,
+	:gray,	:sievert,   :katal,	:becquerel
+    ]
+    
+    # http://en.wikipedia.org/wiki/United_States_customary_units
+    US_CUSTOMARY_AREA_UNITS = [:acre, :section, :township]
+    US_CUSTOMARY_INTERNATIONAL_UNITS = [:point, :pica, :inch, :foot, :yard, :mile]
+    US_CUSTOMARY_MASS_UNITS = [
+	:grain, :dram, :ounce, :pound, :hundredweight, :long_hundredweight,
+	:short_ton, :long_ton, :pennyweight, :troy_ounce, :troy_pound
+    ]
+    US_CUSTOMARY_NAUTICAL_UNITS = [:fathom, :cable, :nautical_mile]
+    US_CUSTOMARY_SURVEY_UNITS = [
+	:link, :survey_foot, :rod, :chain,
+	:furlong, :statute_mile, :league
+    ]
+    US_CUSTOMARY_TEMPERATURE_UNITS = [:fahrenheit, :rankine]
+    US_CUSTOMARY_VOLUME_UNITS = [
+	:acre_foot, :minim, :fluid_dram, :teaspoon, :tablespoon, :fluid_ounce,
+	:jigger, :gill, :cup, :pint, :quart, :barrel, :hogshead
+    ]
+    US_CUSTOMARY_UNITS = US_CUSTOMARY_AREA_UNITS +
+			 US_CUSTOMARY_INTERNATIONAL_UNITS +
+			 US_CUSTOMARY_MASS_UNITS +
+			 US_CUSTOMARY_NAUTICAL_UNITS +
+			 US_CUSTOMARY_SURVEY_UNITS +
+			 US_CUSTOMARY_TEMPERATURE_UNITS +
+			 US_CUSTOMARY_VOLUME_UNITS
+
+    UNITS = SI_UNITS + SI_DERIVED + US_CUSTOMARY_UNITS + [:degrees]
 
     BASE_CAPTURE = '(?<base>' + UNITS.each {|u| u.to_s }.join('|') + ')'
     PREFIX_CAPTURE = '(?<prefix>' + PREFIXES.keys.each {|u| u.to_s }.join('|') + ')?'
