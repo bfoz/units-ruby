@@ -11,26 +11,30 @@ class Units
 	UNITS.include?( s.is_a?(Symbol) ? s : s.to_sym)
     end
 
-    def initialize(args)
-	raise ArgumentError, "Units cannot be nil" unless args
+    def initialize(*args)
+	raise ArgumentError, "Units cannot be nil" if args.select! {|k| k}
 
 	# Convert Strings to Symbols and Symbols to Hashes
-	args = args.to_sym if args.is_a? String
-	args = {args => 1} if args.is_a? Symbol
+	args.map! {|a| a.is_a?(String) ? a.to_sym : a }
+	args.map! {|a| a.is_a?(Symbol) ? {a => 1} : a }
 
-	if args.is_a? Hash
-	    # Check that all keys are valid units
-	    raise UnitsError, "Invalid Units" if args.select! {|k| Units.is_valid_unit?(k)}
+	# Merge all hashes into one
+    	args = args.reduce({}) { |h, a| h.merge(a) {|k,o,n| o+n} }
 
-	    # Remove any keys with value == 0
-	    @units = args.select {|key, value| value != 0}
+	# At this point, args must be a Hash, otherwise there's a problem
+	raise ArgumentError, "Couldn't make a Hash" unless args.is_a? Hash
 
-	    # Can't have units without any units
-	    raise ArgumentError, "Empty units" if @units.empty?
-	else
-	    p args
-	    raise ArgumentError
-	end
+	# Remove any keys with value == 0
+	args = args.select {|key, value| value != 0}
+
+	# Check that all keys are valid units
+	raise UnitsError, "Invalid Units" if args.select! {|k| Units.is_valid_unit?(k)}
+
+	# Can't have units without any units
+	raise ArgumentError, "Empty units" if args.empty?
+
+	# Everything checked out, so use the new units hash
+	@units = args
     end
 
     # Create a clone with negated units
