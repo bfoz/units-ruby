@@ -5,10 +5,18 @@ end
 class Units
     attr_reader :units	# Returns the units hash
 
-    UNITS = [:meters, :inches]
+    UNITS = [:meter, :inch]
+    BASE_CAPTURE = '(?<base>' + UNITS.each {|u| u.to_s }.join('|') + ')'
+    PARSER_EXP = Regexp.new(BASE_CAPTURE+'(s|es)?')
 
     def self.is_valid_unit?(s)
-	UNITS.include?( s.is_a?(Symbol) ? s : s.to_sym)
+	m = PARSER_EXP.match(s.is_a?(String) ? s : s.to_s)
+	m and UNITS.include?( m[:base].to_sym )
+    end
+
+    def self.parse_symbol(s)
+	m = PARSER_EXP.match(s.is_a?(String) ? s : s.to_s)
+	(m and UNITS.include?( m[:base].to_sym )) ? m[:base].to_sym : nil
     end
 
     def initialize(*args)
@@ -213,6 +221,7 @@ end
 module NumericMixin
     def method_missing(id, *args, &block)
 	if Units.is_valid_unit?(id)
+	    id = Units.parse_symbol(id)
 	    units = Units.new(args.empty? ? id : {id => args[0]})
 
 	    # Float and Fixnum need to be handled specially because they're

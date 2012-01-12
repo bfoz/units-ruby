@@ -4,6 +4,11 @@ class UnitsTest < Test::Unit::TestCase
     must "accept valid units" do
 	Units::UNITS.each {|unit| assert(Units.is_valid_unit?(unit)) }
     end
+    must "accept valid plural units" do
+	units_s = Units::UNITS.map {|u| (u.to_s + 's').to_sym }
+	units_es = Units::UNITS.map {|u| (u.to_s + 'es').to_sym }
+	(units_s + units_es).each {|u| assert(Units.is_valid_unit?(u)) }
+    end
     # Also tests equality
     must "accept valid units hash" do
 	assert_equal(Units.new({:meters => 1}), Units.new(:meters => 1))
