@@ -61,8 +61,7 @@ class Units
     def self.parse_symbol(s)
 	m = PARSER_EXP.match(s.is_a?(String) ? s : s.to_s)
 	if m and UNITS.include?(m[:base].to_sym)
-	    names = m.names.map {|n| n.to_sym}
-	    Hash[*names.zip(m.captures).flatten]
+	    Hash[m.names.map {|n| [n.to_sym, m[n] ? m[n].to_sym : nil] }]
 	else
 	    nil
 	end

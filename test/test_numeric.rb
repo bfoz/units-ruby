@@ -6,6 +6,12 @@ class NumericTest < Test::Unit::TestCase
 	assert_raise(NoMethodError) { 1.units }
     end
 
+    must "allow prefixes" do
+	assert_nothing_raised do
+	    1.millimeter
+	end
+    end
+
     # A literal with units is considered to be different from the same literal
     #  without units
     must "break equality" do
