@@ -10,6 +10,7 @@ class NumericTest < Test::Unit::TestCase
 	assert_nothing_raised do
 	    1.millimeter
 	end
+	assert_equal(1.meter, 100.centimeters)
     end
 
     # A literal with units is considered to be different from the same literal
