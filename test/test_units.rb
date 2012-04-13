@@ -13,6 +13,10 @@ class UnitsTest < Test::Unit::TestCase
 	all = Units::UNITS.map {|u| Units::PREFIXES.keys.map {|p| p.to_s + u.to_s } }
 	all.flatten.each {|u| assert(Units.is_valid_unit?(u.to_sym)) }
     end
+    must "accept valid abbreviations" do
+	Units::ABBREVIATIONS.keys.each {|a| assert(Units.is_valid_unit?(a)) }
+    end
+
     # Also tests equality
     must "accept valid units hash" do
 	assert_equal(Units.new({:meters => 1}), Units.new(:meters => 1))

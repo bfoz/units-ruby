@@ -47,6 +47,11 @@ class Units
 			 US_CUSTOMARY_TEMPERATURE_UNITS +
 			 US_CUSTOMARY_VOLUME_UNITS
 
+    ABBREVIATIONS = {
+	:mm => 'millimeter', :cm => 'centimeter', :km => 'kilometer',
+    }
+    ABBREVIATION_EXP = Regexp.new('\A(?<abbreviation>' + ABBREVIATIONS.keys.join('|') + ')')
+
     UNITS = SI_UNITS + SI_DERIVED + US_CUSTOMARY_UNITS + [:degrees]
 
     BASE_CAPTURE = '(?<base>' + UNITS.each {|u| u.to_s }.join('|') + ')'
@@ -54,11 +59,15 @@ class Units
     PARSER_EXP = Regexp.new('\A'+PREFIX_CAPTURE+BASE_CAPTURE+'(s|es)?')
 
     def self.is_valid_unit?(s)
-	m = PARSER_EXP.match(s.is_a?(String) ? s : s.to_s)
+	s = s.is_a?(String) ? s : s.to_s
+	return true if ABBREVIATION_EXP =~ s
+	m = PARSER_EXP.match(s)
 	m and UNITS.include?( m[:base].to_sym )
     end
 
     def self.parse_symbol(s)
+	m = ABBREVIATION_EXP.match(s.is_a?(String) ? s : s.to_s)
+	s = ABBREVIATIONS[m[:abbreviation].to_sym] if m and ABBREVIATIONS.include?(m[:abbreviation].to_sym)
 	m = PARSER_EXP.match(s.is_a?(String) ? s : s.to_s)
 	if m and UNITS.include?(m[:base].to_sym)
 	    Hash[m.names.map {|n| [n.to_sym, m[n] ? m[n].to_sym : nil] }]
