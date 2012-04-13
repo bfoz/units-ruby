@@ -102,6 +102,20 @@ class Units
 	@units = args
     end
 
+    def inspect
+	prefix = ''
+	s = ''
+	@units.each do |k,v|
+	    if (k == :prefix) and v and (v != 0)
+		prefix = PREFIXES.key(v).to_s
+	    else
+		s << k.to_s
+		s << "^#{v}" if (v > 1) or (v < 0)
+	    end
+	end
+	prefix+s
+    end
+
     # Create a clone with negated units
     def invert
 	Units.new(@units.inject({}) { |h,(k,v)| h[k] = -v; h })
@@ -236,6 +250,10 @@ class LiteralWithUnits
     # Pass most everything through to the literal
     def method_missing(id, *args)
 	@literal.send(id, *args)
+    end
+
+    def inspect
+	@literal.inspect + ' ' + @units.inspect
     end
 
     # Both the values and the units must match for two numbers to be considered equal
