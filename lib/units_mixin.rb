@@ -22,6 +22,10 @@ module UnitsMixin
 	@units = args.is_a?(Units) ? args : Units.new(args)
     end
 
+    def inspect
+	super.inspect + ' ' + @units.inspect
+    end
+
     # Both value and units must match for two numbers to be considered equal
     #  ie. 3.meters != 3.inches != 3
     def equality(other)
