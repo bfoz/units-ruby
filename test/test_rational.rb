@@ -38,19 +38,30 @@ class RationalTest < Test::Unit::TestCase
     must "allow addition" do
 	assert_equal(7.to_r.meters, 3.to_r.meters + 4.to_r.meters)
     end
-    must "reject addition of Rational" do
-	assert_raise(UnitsError) { 3.to_r.meters + 4.to_r }
-	assert_raise(UnitsError) { 3.to_r + 4.to_r.meters }
+    must "allow addition of Rational" do
+	assert_nothing_raised { 3.to_r.meters + 4.to_r }
+	assert_nothing_raised { 3.to_r + 4.to_r.meters }
+	assert_equal(7.to_r.meters, 3.to_r.meters + 4.to_r)
+	assert_equal(7.to_r.meters, 3.to_r + 4.to_r.meters)
+    end
+    must "reject addition of mixed units Rationals" do
+	assert_raise(UnitsError) { 3.to_r.meters + 4.to_r.inches }
+	assert_raise(UnitsError) { 3.to_r.inches + 4.to_r.meters }
     end
 
     must "allow subtraction" do
 	assert_equal(1.to_r.meters, 4.to_r.meters - 3.to_r.meters)
     end
-    must "reject subtraction of Rational" do
-	assert_raise(UnitsError) { 3.to_r.meters - 4.to_r }
+    must "allow subtraction of Rational" do
+	assert_nothing_raised { 3.to_r.meters - 4.to_r }
+	assert_equal(-1.to_r.meters, 3.to_r.meters - 4.to_r)
     end
-    must "reject subtraction from Rational" do
-	assert_raise(UnitsError) { 3.to_r - 4.to_r.meters }
+    must "allow subtraction from Rational" do
+	assert_nothing_raised { 3.to_r - 4.to_r.meters }
+	assert_equal(-1.to_r.meters, 3.to_r - 4.to_r.meters)
+    end
+    must "reject subtraction of mixed units" do
+	assert_raise(UnitsError) { 3.to_r.meters - 4.to_r.inches }
     end
 
     must "allow multiplication" do

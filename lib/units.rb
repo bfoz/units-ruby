@@ -200,26 +200,18 @@ module UnitsMixin
     def add(other)
 	result = self.unitsmethods_original_addition(other)
 	if @units and other.units
-	    if @units == other.units
-		result.units = @units + other.units
-	    else
-		raise UnitsError, "Addition requires matching units"
-	    end
+	    result.units = @units + other.units
 	elsif @units or other.units
-	    raise UnitsError, "Can't add a number with units to a literal"
+	    result.units = @units || other.units
 	end
 	result
     end
     def subtact(other)
 	result = self.unitsmethods_original_subtraction(other)
 	if @units and other.units
-	    if @units == other.units
-		result.units = @units - other.units
-	    else
-		raise UnitsError, "Subtract requires matching units"
-	    end
-	elsif (@units or other.units) and (@units != other.units)
-	    raise UnitsError, "Can't subtract a number with units from a literal"
+	    result.units = @units - other.units
+	elsif (@units or other.units)
+	    result.units = @units || other.units
 	end
 	result
     end
@@ -274,13 +266,13 @@ class LiteralWithUnits
     def +(other)
 	LiteralWithUnits.new(@literal + other, @units + other.units)
     rescue NoMethodError
-	raise UnitsError, "Can't add literal without units"
+	LiteralWithUnits.new(@literal + other, @units)
     end
 
     def -(other)
 	LiteralWithUnits.new(@literal - other, @units - other.units)
     rescue NoMethodError
-	raise UnitsError, "Can't subtract literals without units"
+	LiteralWithUnits.new(@literal - other, @units)
     end
 
     def *(other)

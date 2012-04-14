@@ -39,7 +39,11 @@ class NumericTest < Test::Unit::TestCase
 	assert_equal(7.meters, 3.meters + 4.meters)
     end
     must "reject mixed units when adding" do
-	assert_raise(UnitsError) { 3.meters + 3 }
+	assert_raise(UnitsError) { 3.meters + 3.inches }
+    end
+    must "allow addition of valid units and no units" do
+	assert_nothing_raised { 3.meters + 3 }
+	assert_equal(6.meters, 3.meters + 3)
     end
     must "reject mixed units when reverse adding" do
 	assert_raise(UnitsError) { 3 + 3.meters }
@@ -49,7 +53,10 @@ class NumericTest < Test::Unit::TestCase
 	assert_equal(1.meters, 4.meters - 3.meters)
     end
     must "reject mixed units when subtracting" do
-	assert_raise(UnitsError) { 3.meters - 4 }
+	assert_raise(UnitsError) { 3.meters - 4.inches }
+    end
+    must "allow subtraction of valid units and no units" do
+	assert_nothing_raised { 3.meters - 3 }
     end
     must "reject mixed units when reverse subtracting" do
 	assert_raise(UnitsError) { 3 - 4.meters }
