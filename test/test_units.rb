@@ -85,4 +85,11 @@ class UnitsTest < Test::Unit::TestCase
     must "not equal nil" do
 	assert_not_equal(Units.new(:meters), nil)
     end
+
+    must "have an inspect method" do
+	assert_equal('meter', Units.new('meters').inspect)
+    end
+    must "have a to_s method" do
+	assert_equal('meter', Units.new('meters').to_s)
+    end
 end

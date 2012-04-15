@@ -14,7 +14,7 @@ class Units
 	:kilo  =>   3,	:mega  =>   6,	:giga  =>   9,	:tera  =>  12,
 	:peta  =>  15,	:exa   =>  18,	:zetta =>  21,	:yotta =>  24,
     }
-    
+
     # http://en.wikipedia.org/wiki/International_System_of_Units
     SI_UNITS = [:meter, :gram, :second, :ampere, :kelvin, :candela, :mole]
     SI_DERIVED = [
@@ -23,7 +23,7 @@ class Units
 	:weber,	:tesla,	    :henry,	:celsius,   :lumen,	:lux,
 	:gray,	:sievert,   :katal,	:becquerel
     ]
-    
+
     # http://en.wikipedia.org/wiki/United_States_customary_units
     US_CUSTOMARY_AREA_UNITS = [:acre, :section, :township]
     US_CUSTOMARY_INTERNATIONAL_UNITS = [:point, :pica, :inch, :foot, :yard, :mile]
@@ -126,6 +126,9 @@ class Units
 	end
 	prefix+s
     end
+    def to_s
+	inspect
+    end
 
     # Create a clone with negated units
     def invert
@@ -178,6 +181,9 @@ class LiteralWithUnits
 
     def inspect
 	@literal.inspect + ' ' + @units.inspect
+    end
+    def to_s
+	@literal.to_s
     end
 
     # Both the values and the units must match for two numbers to be considered equal

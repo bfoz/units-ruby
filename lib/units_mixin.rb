@@ -25,6 +25,9 @@ module UnitsMixin
     def inspect
 	super.inspect + ' ' + @units.inspect
     end
+    def to_s
+	super
+    end
 
     # Both value and units must match for two numbers to be considered equal
     #  ie. 3.meters != 3.inches != 3
