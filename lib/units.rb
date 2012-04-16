@@ -127,9 +127,7 @@ class Units
 	end
 	prefix+s
     end
-    def to_s
-	inspect
-    end
+    alias_method :to_s, :inspect
 
     # Create a clone with negated units
     def invert
