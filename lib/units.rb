@@ -1,4 +1,5 @@
 require_relative 'units_mixin'
+require_relative 'units/literal.rb'
 
 # Add an exception class for unsupported operations
 class UnitsError < ArgumentError
@@ -151,11 +152,11 @@ class Units
     end
 
     def +(other)
-	raise UnitsError, "Addition requires matching units" unless (self == other)
+	raise UnitsError, "Addition requires matching units" unless (self == other) || !other
 	Units.new(@units)
     end
     def -(other)
-	raise UnitsError, "Subtraction requires matching units" unless (self == other)
+	raise UnitsError, "Subtraction requires matching units" unless (self == other) || !other
 	Units.new(@units)
     end
     def *(other)
@@ -164,62 +165,6 @@ class Units
     def /(other)
 	other ? (self * other.invert) : self
     end
-end
-
-class LiteralWithUnits
-    attr_reader :literal, :units
-
-    def initialize(literal, units)
-	@literal = literal
-	@units = units.is_a?(Units) ? units : Units.new(units)
-    end
-
-    # Pass most everything through to the literal
-    def method_missing(id, *args)
-	@literal.send(id, *args)
-    end
-
-    def inspect
-	@literal.inspect + ' ' + @units.inspect
-    end
-    def to_s
-	@literal.to_s
-    end
-
-    # Both the values and the units must match for two numbers to be considered equal
-    #  ie. 3.meters != 3.inches != 3
-    def ==(other)
-	other.respond_to?(:units) and (@units == other.units) and (@literal == other.literal)
-    end
-
-    def +(other)
-	LiteralWithUnits.new(@literal + other, @units + other.units)
-    rescue NoMethodError
-	LiteralWithUnits.new(@literal + other, @units)
-    end
-
-    def -(other)
-	LiteralWithUnits.new(@literal - other, @units - other.units)
-    rescue NoMethodError
-	LiteralWithUnits.new(@literal - other, @units)
-    end
-
-    def *(other)
-	LiteralWithUnits.new(@literal * other, @units * other.units)
-    rescue ArgumentError    # Handle units that cancel out
-	@literal * other
-    rescue NoMethodError    # Allow multiplication by a literal
-	LiteralWithUnits.new(@literal * other, @units)
-    end
-
-    def /(other)
-	LiteralWithUnits.new(@literal / other, @units / other.units)
-    rescue ArgumentError    # Handle units that cancel out
-	@literal / other
-    rescue NoMethodError    # Allow division by a literal
-	LiteralWithUnits.new(@literal / other, @units)
-    end
-
 end
 
 # Trap missing method calls and look for methods that look like unit names
@@ -235,7 +180,7 @@ module NumericMixin
 	    #  added to a literal becomes available to all literals of the
 	    #  same value.
 	    if self.is_a?(Fixnum) or self.is_a?(Float)
-		LiteralWithUnits.new(self, units)	# Create a new wrapper object
+		Units::Literal.new(self, units)	# Create a new wrapper object
 	    else
 		# Check that the class hasn't already been patched
 		#  Numeric's subclasses are patched here, instead of at load-time,
