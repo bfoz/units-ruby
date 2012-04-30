@@ -13,7 +13,11 @@ class Units
 	end
 	
 	def inspect
-	    @literal.inspect + ' ' + @units.inspect
+	    if @units
+		@literal.inspect + ' ' + @units.inspect
+	    else
+		@literal.inspect
+	    end
 	end
 	def to_s
 	    @literal.to_s

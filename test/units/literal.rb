@@ -100,6 +100,7 @@ class LiteralTest < Test::Unit::TestCase
 
     must "have an inspect method" do
 	assert_equal('1 meter', one_meter.inspect)
+	assert_equal(1, one);
     end
     must "have a to_s method that returns only the literal's to_s" do
 	assert_equal('1', one_meter.to_s)
