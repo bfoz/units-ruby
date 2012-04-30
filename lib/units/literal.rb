@@ -1,5 +1,5 @@
 class Units
-    class Literal
+    class Literal < Numeric
 	attr_reader :literal, :units
 	
 	def initialize(literal, units=nil)

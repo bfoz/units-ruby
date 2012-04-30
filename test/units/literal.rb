@@ -22,6 +22,10 @@ class LiteralTest < Test::Unit::TestCase
     
     twelve_meters2 = Literal(12, Units.new(:meters, :meters))
 
+    must "claim to be a Numeric" do
+	assert_kind_of(Numeric, Literal(1))
+    end
+
     # A literal with units is considered to be different from the same literal
     #  without units
     must "break equality for mixed units" do
