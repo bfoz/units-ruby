@@ -2,12 +2,12 @@ require_relative 'units_mixin'
 require_relative 'units/literal.rb'
 
 # Add an exception class for unsupported operations
-class UnitsError < ArgumentError
-end
+UnitsError = Class.new(ArgumentError)
 
 class Units
     attr_reader :units	# Returns the units hash
 
+    # http://wikipedia.org/wiki/Metric_prefix
     PREFIXES = {
 	:yocto => -24,	:zepto => -21,	:atto  => -18,	:femto => -15,
 	:pico  => -12,	:nano  =>  -9,	:micro =>  -6,	:milli =>  -3,
@@ -16,7 +16,7 @@ class Units
 	:peta  =>  15,	:exa   =>  18,	:zetta =>  21,	:yotta =>  24,
     }
 
-    # http://en.wikipedia.org/wiki/International_System_of_Units
+    # http://wikipedia.org/wiki/International_System_of_Units
     SI_UNITS = [:meter, :gram, :second, :ampere, :kelvin, :candela, :mole]
     SI_DERIVED = [
 	:hertz,	:radian,    :steradian,	:newton,    :pascal,	:joule,
@@ -25,7 +25,7 @@ class Units
 	:gray,	:sievert,   :katal,	:becquerel
     ]
 
-    # http://en.wikipedia.org/wiki/United_States_customary_units
+    # http://wikipedia.org/wiki/United_States_customary_units
     US_CUSTOMARY_AREA_UNITS = [:acre, :section, :township]
     US_CUSTOMARY_INTERNATIONAL_UNITS = [:point, :pica, :inch, :foot, :yard, :mile]
     US_CUSTOMARY_MASS_UNITS = [
