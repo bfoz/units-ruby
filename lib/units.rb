@@ -55,7 +55,24 @@ class Units
     }
     ABBREVIATION_EXP = Regexp.new('\A(?<abbreviation>' + ABBREVIATIONS.keys.join('|') + ')')
 
+    PREFIX_ABBREVIATIONS = {
+	:yocto => 'y',	:zepto => 'z',	:atto  => 'a',	:femto => 'f',
+	:pico  => 'p',	:nano  => 'n',	:micro => 'u',	:milli => 'm',
+	:centi => 'c',	:deci  => 'd',	:deca  => 'da',	:hecto => 'h',
+	:kilo  => 'k',	:mega  => 'M',	:giga  => 'G',	:tera  => 'T',
+	:peta  => 'P',	:exa   => 'E',	:zetta => 'Z',	:yotta => 'Y',
+    }
+
+    SI_UNIT_ABBREVIATIONS = {
+	:meter	=> 'm',	:gram	 => 'g',    :second => 's',	:ampere => 'A',
+	:kelvin => 'K',	:candela => 'cd',   :mole   => 'mol'
+    }
+
+    US_CUSTOMARY_UNIT_ABBREVIATIONS = {
+    }
+
     UNITS = SI_UNITS + SI_DERIVED + US_CUSTOMARY_UNITS + [:degrees]
+    UNIT_ABBREVIATIONS = SI_UNIT_ABBREVIATIONS.merge(US_CUSTOMARY_UNIT_ABBREVIATIONS)
 
     BASE_CAPTURE = '(?<base>' + UNITS.each {|u| u.to_s }.join('|') + ')'
     PREFIX_CAPTURE = '(?<prefix>' + PREFIXES.keys.each {|u| u.to_s }.join('|') + ')?'
@@ -112,6 +129,21 @@ class Units
 
 	# Everything checked out, so use the new units hash
 	@units = args
+    end
+
+    # @return {String} The unit abbreviation
+    def to_abbreviation
+	prefix = ''
+	s = ''
+	@units.each do |k,v|
+	    if (k == :prefix) and v and (v != 0)
+		prefix = PREFIX_ABBREVIATIONS[PREFIXES.key(v)]
+	    else
+		s << UNIT_ABBREVIATIONS[k]
+		s << "^#{v}" if (v > 1) or (v < 0)
+	    end
+	end
+	prefix+s
     end
 
     def inspect

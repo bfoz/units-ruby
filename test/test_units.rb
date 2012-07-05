@@ -92,4 +92,7 @@ class UnitsTest < Test::Unit::TestCase
     must "have a to_s method" do
 	assert_equal('meter', Units.new('meters').to_s)
     end
+    must "have a to_abbreviation method" do
+	assert_equal('cm', Units.new('centimeters').to_abbreviation)
+    end
 end
