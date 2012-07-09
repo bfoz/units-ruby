@@ -1,6 +1,6 @@
 require_relative 'units_mixin'
 require_relative 'units/constants'
-require_relative 'units/literal.rb'
+require_relative 'units/literal'
 
 # Add an exception class for unsupported operations
 UnitsError = Class.new(ArgumentError)
