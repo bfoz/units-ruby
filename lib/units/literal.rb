@@ -5,6 +5,7 @@ class Units
 	def initialize(literal, units=nil)
 	    @literal = literal
 	    @units = (units.is_a?(Units) ? units : Units.new(units)) if units
+	    @units = nil if 0 == @literal
 	end
 	
 	# Pass most everything through to the literal
@@ -34,19 +35,19 @@ class Units
 	end
 	
 	def +(other)
-	    Literal.new(@literal + other, @units + other.units)
+	    Literal.new(@literal + other, @units ? (@units + other.units) : other.units)
 	rescue NoMethodError
 	    Literal.new(@literal + other, @units)
 	end
 
 	def -(other)
-	    Literal.new(@literal - other, @units - other.units)
+	    Literal.new(@literal - other, @units ? (@units - other.units) : other.units)
 	rescue NoMethodError
 	    Literal.new(@literal - other, @units)
 	end
 
 	def *(other)
-	    Literal.new(@literal * other, @units * other.units)
+	    Literal.new(@literal * other, @units ? (@units * other.units) : other.units)
 	rescue ArgumentError    # Handle units that cancel out
 	    @literal * other
 	rescue NoMethodError    # Allow multiplication by a literal
@@ -54,7 +55,7 @@ class Units
 	end
 
 	def /(other)
-	    Literal.new(@literal / other, @units / other.units)
+	    Literal.new(@literal / other, @units ? (@units / other.units) : other.units)
 	rescue ArgumentError    # Handle units that cancel out
 	    @literal / other
 	rescue NoMethodError    # Allow division by a literal

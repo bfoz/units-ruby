@@ -90,12 +90,12 @@ describe Units::Literal do
 	    (3.meters * 4.meters).must_equal twelve_meters2
 	end
 
-	it "allow division" do
+	it "should support division" do
 	    assert_equal(four, twelve_meters / three_meters)
 	end
     end
 
-    describe "arithmetic with normal literals" do
+    describe "integer arithmetic with normal literals" do
 	it "should support multiplication" do
 	    (three_meters * 4).must_equal twelve_meters
 	    (three_meters * four).must_equal twelve_meters
@@ -103,15 +103,18 @@ describe Units::Literal do
 
 	it "support division" do
 	    (twelve_meters / 3).must_equal four_meters
+	    (one_meter / 2).must_equal 0
 	end
     end
 
     describe "arithmetic with mixed units" do
 	it "should allow addition of valid units and no units" do
 	    (three_meters + four).must_equal seven_meters
+	    (four + three_meters).must_equal seven_meters
 	end
 
 	it "should allow subtraction of valid units and no units" do
+	    (three_meters - three).must_equal 0
 	    (three - three_meters).must_equal 0
 	end
 
