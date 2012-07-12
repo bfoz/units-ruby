@@ -26,13 +26,14 @@ class Units
 	
 	# Both the values and the units must match for two numbers to be considered equal
 	#  ie. 3.meters != 3.inches != 3
-	def ==(other)
+	def eql?(other)
 	    if other.respond_to?(:units)
 		(@units == other.units) and (@literal == other.literal)
 	    else
 		(@units == nil) and (@literal == other)
 	    end
 	end
+	alias == eql?
 	
 	def +(other)
 	    Literal.new(@literal + other, @units ? (@units + other.units) : other.units)

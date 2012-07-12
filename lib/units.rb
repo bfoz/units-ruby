@@ -97,13 +97,11 @@ class Units
     end
 
     # Define comparison operators
-    def ==(other)
-	if other
-	    @units == other.units
-	else
-	    false
-	end
+    def eql?(other)
+	self.class.equal?(other.class) && @units == other.units
     end
+    alias == eql?
+
     def !=(other)   # Define inequality as the opposite of equality
 	!(self == other)
     end
