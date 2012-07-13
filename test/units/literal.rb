@@ -91,7 +91,26 @@ describe Units::Literal do
 	end
 
 	it "should support division" do
-	    assert_equal(four, twelve_meters / three_meters)
+	    (twelve_meters / three_meters).must_equal four_meters
+	end
+    end
+
+    describe "coerced arithmetic" do
+	it "addition" do
+	    (4 + three_meters).must_equal seven_meters
+	end
+
+	it "subtraction" do
+	    (4 - three_meters).must_equal one_meter
+	end
+
+	it "multiplication" do
+	    (4 * three_meters).must_equal twelve_meters
+	end
+
+	it "division" do
+	    (4 / three_meters).must_equal one_meter
+	    (12.0 / three_meters).must_equal four_meters
 	end
     end
 
@@ -122,7 +141,7 @@ describe Units::Literal do
 	    lambda { three_meters + three_inches }.must_raise UnitsError
 	end
 
-	it "reject mixed units when subtracting" do
+	it "should reject mixed units when subtracting" do
 	    lambda { three_meters - four_inches }.must_raise UnitsError
 	end
     end
