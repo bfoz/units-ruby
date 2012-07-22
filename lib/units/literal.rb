@@ -1,27 +1,27 @@
 class Units
     class Literal < Numeric
-	attr_reader :literal, :units
+	attr_reader :units, :value
 
-	def initialize(literal, units=nil)
-	    @literal = literal
+	def initialize(value, units=nil)
+	    @value = value
 	    @units = (units.is_a?(Units) ? units : Units.new(units)) if units
-	    @units = nil if 0 == @literal
+	    @units = nil if 0 == @value
 	end
 
-	# Pass most everything through to the literal
+	# Pass most everything through to the underlying value
 	def method_missing(id, *args)
-	    @literal.send(id, *args)
+	    @value.send(id, *args)
 	end
 
 	def inspect
 	    if @units
-		@literal.inspect + ' ' + @units.inspect
+		@value.inspect + ' ' + @units.inspect
 	    else
-		@literal.inspect
+		@value.inspect
 	    end
 	end
 	def to_s
-	    @literal.to_s
+	    @value.to_s
 	end
 
 	def coerce(other)
@@ -38,9 +38,9 @@ class Units
 	#  ie. 3.meters != 3.inches != 3
 	def eql?(other)
 	    if other.respond_to?(:units)
-		(@units == other.units) and (@literal == other.literal)
+		(@units == other.units) and (@value == other.value)
 	    else
-		(@units == nil) and (@literal == other)
+		(@units == nil) and (@value == other)
 	    end
 	end
 	alias == eql?
@@ -66,16 +66,16 @@ class Units
 	# Generic operator handler
 	def op(sym, other)
 	    if other.kind_of? Literal
-		Literal.new(@literal.send(sym, other.literal), @units ? (@units.send(sym, other.units)) : other.units)
+		Literal.new(@value.send(sym, other.value), @units ? (@units.send(sym, other.units)) : other.units)
 	    else
-		Literal.new(@literal.send(sym, other), @units ? (@units.send(sym, other.units)) : other.units)
+		Literal.new(@value.send(sym, other), @units ? (@units.send(sym, other.units)) : other.units)
 	    end
 	rescue UnitsError
 	    raise
 	rescue ArgumentError    # Handle units that cancel out
-	    @literal.send(sym, other)
+	    @value.send(sym, other)
 	rescue NoMethodError
-	    Literal.new(@literal.send(sym, other), @units)
+	    Literal.new(@value.send(sym, other), @units)
 	end
     end
 end
