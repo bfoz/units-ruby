@@ -67,6 +67,8 @@ class Units
 	def op(sym, other)
 	    if other.kind_of? Literal
 		Literal.new(@value.send(sym, other.value), @units ? (@units.send(sym, other.units)) : other.units)
+	    elsif other.respond_to? :map
+		other.map {|a| self.send(sym, a)}
 	    else
 		Literal.new(@value.send(sym, other), @units ? (@units.send(sym, other.units)) : other.units)
 	    end

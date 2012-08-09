@@ -1,3 +1,4 @@
+require 'matrix'
 require 'minitest/autorun'
 require 'units/literal'
 
@@ -18,6 +19,7 @@ describe Units::Literal do
     let(:one_meter)	{ Literal(1, :meter) }
     let(:three_meters)	{ Literal(3, :meters) }
     let(:four_meters)	{ Literal(4, :meters) }
+    let(:six_meters)	{ Literal(6, :meters) }
     let(:seven_meters)	{ Literal(7, :meters) }
     let(:twelve_meters)	{ Literal(12, :meters) }
 
@@ -143,6 +145,13 @@ describe Units::Literal do
 
 	it "should reject mixed units when subtracting" do
 	    lambda { three_meters - four_inches }.must_raise UnitsError
+	end
+
+	it "must return a Vector when multiplying a Vector" do
+	    v = (three_meters * Vector[1,2])
+	    v.must_be_kind_of Vector
+	    v[0].must_equal three_meters
+	    v[1].must_equal six_meters
 	end
     end
 
