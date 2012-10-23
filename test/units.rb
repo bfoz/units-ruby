@@ -131,6 +131,18 @@ describe Units do
 	end
     end
 
+    describe "comparison" do
+	describe "spaceship" do
+	    it "must return 0 for equal units" do
+		(Units.new(:meters) <=> Units.new(:meters)).must_equal 0
+	    end
+
+	    it "must return nil for unequal units" do
+		(Units.new(:meters) <=> Units.new(:inches)).must_be_nil
+	    end
+	end
+    end
+
     describe "conversion" do
 	it "should have an inspect method" do
 	    Units.new('meters').inspect.must_equal 'meter'

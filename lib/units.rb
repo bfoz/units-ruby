@@ -109,6 +109,10 @@ class Units
 	@units == other.units
     end
 
+    def <=>(other)
+	self.eql?(other) ? 0 : nil
+    end
+
     def +(other)
 	raise UnitsError, "Addition requires matching units" unless (self == other) || !other
 	Units.new(@units)

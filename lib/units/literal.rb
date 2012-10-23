@@ -45,6 +45,21 @@ class Units
 	end
 	alias == eql?
 
+	def <=>(other)
+	    if other.kind_of? Literal
+		if @units
+		    @units.eql?(other.units) ? (@value <=> other.value) : nil
+		else
+		    (@value <=> other.value)
+		end
+	    elsif other.respond_to? :map
+		other.map {|a| self.send(:<=>, a)}
+	    else
+		@value <=> other
+	    end
+	end
+
+	# @group Arithmetic
 	def +(other)
 	    op(:+, other)
 	end
@@ -60,6 +75,7 @@ class Units
 	def /(other)
 	    op(:/, other)
 	end
+	# @endgroup
 
 	private
 

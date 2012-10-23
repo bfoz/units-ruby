@@ -155,6 +155,32 @@ describe Units::Literal do
 	end
     end
 
+    describe "comparison" do
+	describe "spaceship" do
+	    it "must spaceship with like units" do
+		(three_meters <=> four_meters).must_equal -1
+		(three_meters <=> three_meters).must_equal 0
+		(four_meters <=> three_meters).must_equal 1
+	    end
+
+	    it "must not spaceship with unlike units" do
+		(three_meters <=> three_inches).must_be_nil
+	    end
+
+	    it "must spaceship with unitless literals" do
+		(three_meters <=> 4).must_equal -1
+		(three_meters <=> 3).must_equal 0
+		(four_meters <=> 3).must_equal 1
+	    end
+
+	    it "must reverse spaceship with unitless literals" do
+		(3 <=> four_meters).must_equal -1
+		(3 <=> three_meters).must_equal 0
+		(4 <=> three_meters).must_equal 1
+	    end
+	end
+    end
+
     it "should have an inspect method" do
 	assert_equal('1 meter', one_meter.inspect)
 	assert_equal(1, one);
