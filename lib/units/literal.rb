@@ -92,7 +92,7 @@ class Units
 	rescue UnitsError
 	    raise
 	rescue ArgumentError    # Handle units that cancel out
-	    @value.send(sym, other)
+	    @value.send(sym, other.value)
 	rescue NoMethodError
 	    Literal.new(@value.send(sym, other), @units)
 	end
