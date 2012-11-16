@@ -93,7 +93,7 @@ class Units
 
     # Create a clone with negated units
     def invert
-	Units.new(@units.inject({}) { |h,(k,v)| h[k] = -v; h })
+	Units.new(@units.inject({}) {|h,(k,v)| h[k] = -v; h })
     end
 
     # Define comparison operators

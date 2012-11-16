@@ -9,7 +9,7 @@ module UnitsMixin
 	    alias_method :unitsmethods_original_addition, :+
 	    alias_method :+, :add
 	    alias_method :unitsmethods_original_subtraction, :-
-	    alias_method :-, :subtact
+	    alias_method :-, :subtract
 	    alias_method :unitsmethods_original_multiply, :*
 	    alias_method :*, :multiply
 	    alias_method :unitsmethods_original_division, :/
@@ -50,7 +50,7 @@ module UnitsMixin
 	end
 	result
     end
-    def subtact(other)
+    def subtract(other)
 	result = self.unitsmethods_original_subtraction(other)
 	if @units and other.units
 	    result.units = @units - other.units
