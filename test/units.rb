@@ -156,4 +156,9 @@ describe Units do
 	    Units.new('centimeters').to_abbreviation.must_equal 'cm'
 	end
     end
+
+    it "must square root" do
+	(Units.new('meters')*Units.new('meters')).square_root.must_equal Units.new('meters')
+    end
+
 end

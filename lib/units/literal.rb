@@ -24,6 +24,7 @@ class Units
 	    @value.to_s
 	end
 
+	# Convert other into something that can handle being divided by {Literal}
 	def coerce(other)
 	    case other
 		when Fixnum then [Literal.new(other), self]

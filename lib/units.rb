@@ -1,6 +1,7 @@
 require_relative 'units_mixin'
 require_relative 'units/constants'
 require_relative 'units/literal'
+require_relative 'units/math'
 
 # Add an exception class for unsupported operations
 UnitsError = Class.new(ArgumentError)
@@ -126,6 +127,12 @@ class Units
     end
     def /(other)
 	other ? (self * other.invert) : self
+    end
+
+    # Return the units for the square root of the receiver
+    # @return [Units]
+    def square_root
+	Units.new(@units.inject({}) {|h,(k,v)| h[k] = v/2; h })
     end
 end
 

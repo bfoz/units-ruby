@@ -181,6 +181,10 @@ describe Units::Literal do
 	end
     end
 
+    it "must square root" do
+	Math.sqrt(three_meters*three_meters).must_equal three_meters
+    end
+
     it "should have an inspect method" do
 	assert_equal('1 meter', one_meter.inspect)
 	assert_equal(1, one);
