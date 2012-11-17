@@ -69,8 +69,8 @@ module UnitsMixin
 	result
     end
     def divide(other)
-	result = unitsmethods_original_division(other)
-	
+	result = unitsmethods_original_division(other.kind_of?(Units::Literal) ? other.value : other)
+
 	other_units = other.respond_to?(:units) ? other.units : nil
 	if @units and other_units
 	    begin

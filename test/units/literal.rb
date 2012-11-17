@@ -111,9 +111,16 @@ describe Units::Literal do
 	end
 
 	it "division" do
+	    (0 / one_meter).must_equal 0
+	    (0 / three_meters).must_equal 0
 	    (4 / three_meters).must_equal one_meter
 	    (12.0 / three_meters).must_equal four_meters
 	end
+
+	it "must divide a Rational" do
+	    (Rational(2,1) / one_meter).must_equal Rational(2,1).meters(-1)
+	end
+
     end
 
     describe "integer arithmetic with normal literals" do

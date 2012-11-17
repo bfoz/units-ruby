@@ -1,3 +1,5 @@
+require_relative '../units'
+
 class Units
     class Literal < Numeric
 	attr_reader :units, :value
