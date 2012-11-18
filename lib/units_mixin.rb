@@ -19,7 +19,7 @@ module UnitsMixin
 
     # FIXME Get rid of this method. Changing units shouldn't be allowed.
     def units=(args)
-	@units = args.is_a?(Units) ? args : Units.new(args)
+	@units = (!args or args.is_a?(Units)) ? args : Units.new(args)
     end
 
     def inspect
@@ -68,18 +68,27 @@ module UnitsMixin
 	end
 	result
     end
+
     def divide(other)
 	result = unitsmethods_original_division(other.kind_of?(Units::Literal) ? other.value : other)
 
 	other_units = other.respond_to?(:units) ? other.units : nil
 	if @units and other_units
 	    begin
-		result.units = @units / other.units
+		result_units = @units / other.units
 	    rescue ArgumentError
 	    end
 	elsif @units or other_units
-	    result.units = (@units or other.units.invert)
+	    result_units = (@units or other.units.invert)
 	end
-	result
+
+	if result.respond_to?(:units=)
+	    result.units = result_units
+	    result
+	elsif result_units
+	    Units::Literal.new(result, result_units)
+	else
+	    result
+	end
     end
 end
