@@ -6,7 +6,11 @@ module Math
     # @return [Numeric]
     def sqrt(a)
 	if a.kind_of?(Units::Literal)
-	    Units::Literal.new(units_sqrt(a.value), a.units.square_root)
+	    if a.units
+		Units::Literal.new(units_sqrt(a.value), a.units.square_root)
+	    else
+		units_sqrt(a.value)
+	    end
 	else
 	    units_sqrt(a)
 	end
