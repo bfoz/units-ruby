@@ -32,9 +32,10 @@ module UnitsMixin
     # Both value and units must match for two numbers to be considered equal
     #  ie. 3.meters != 3.inches != 3
     def equality(other)
-	if @units and other.units
-	    (@units == other.units) and unitsmethods_original_equality(other)
-	elsif @units or other.units
+	other_units = units_for_other(other)
+	if @units and other_units
+	    (@units == other_units) and unitsmethods_original_equality(other)
+	elsif @units or other_units
 	    false
 	else
 	    unitsmethods_original_equality(other)
@@ -42,46 +43,39 @@ module UnitsMixin
     end
 
     def add(other)
-	result = self.unitsmethods_original_addition(other)
-	if @units and other.units
-	    result.units = @units + other.units
-	elsif @units or other.units
-	    result.units = @units || other.units
-	end
-	result
+	result = self.unitsmethods_original_addition(value_for_other(other))
+	apply_result_units(result, units_op(:+, units_for_other(other)))
     end
+
     def subtract(other)
-	result = self.unitsmethods_original_subtraction(other)
-	if @units and other.units
-	    result.units = @units - other.units
-	elsif (@units or other.units)
-	    result.units = @units || other.units
-	end
-	result
+	result = self.unitsmethods_original_subtraction(value_for_other(other))
+	apply_result_units(result, units_op(:-, units_for_other(other)))
     end
+
     def multiply(other)
-	result = unitsmethods_original_multiply(other)
-	if @units and other.units
-	    result.units = @units * other.units
-	elsif @units or other.units
-	    result.units = (@units or other.units)
-	end
-	result
+	result = unitsmethods_original_multiply(value_for_other(other))
+	apply_result_units(result, units_op(:*, units_for_other(other)))
     end
 
     def divide(other)
-	result = unitsmethods_original_division(other.kind_of?(Units::Literal) ? other.value : other)
+	result = unitsmethods_original_division(value_for_other(other))
 
-	other_units = other.respond_to?(:units) ? other.units : nil
+	other_units = units_for_other(other)
 	if @units and other_units
 	    begin
-		result_units = @units / other.units
+		result_units = @units / other_units
 	    rescue ArgumentError
 	    end
 	elsif @units or other_units
-	    result_units = (@units or other.units.invert)
+	    result_units = (@units or other_units.invert)
 	end
 
+	apply_result_units(result, result_units)
+    end
+
+    private
+
+    def apply_result_units(result, result_units)
 	if result.respond_to?(:units=)
 	    result.units = result_units
 	    result
@@ -90,5 +84,21 @@ module UnitsMixin
 	else
 	    result
 	end
+    end
+
+    def units_for_other(other)
+	other_units = other.respond_to?(:units) ? other.units : nil
+    end
+
+    def units_op(op, other_units)
+	if @units and other_units
+	    @units.send(op, other_units)
+	elsif @units or other_units
+	    @units or other_units
+	end
+    end
+
+    def value_for_other(other)
+	other.kind_of?(Units::Literal) ? other.value : other
     end
 end
