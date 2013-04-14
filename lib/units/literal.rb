@@ -7,7 +7,6 @@ class Units
 	def initialize(value, units=nil)
 	    @value = value
 	    @units = (units.is_a?(Units) ? units : Units.new(units)) if units
-	    @units = nil if 0 == @value
 	end
 
 	# Pass most everything through to the underlying value

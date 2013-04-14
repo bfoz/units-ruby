@@ -111,8 +111,8 @@ describe Units::Literal do
 	end
 
 	it "division" do
-	    (0 / one_meter).must_equal 0
-	    (0 / three_meters).must_equal 0
+	    (0 / one_meter).must_equal 0.meters
+	    (0 / three_meters).must_equal 0.meters
 	    (4 / three_meters).must_equal one_meter
 	    (12.0 / three_meters).must_equal four_meters
 	end
@@ -131,7 +131,7 @@ describe Units::Literal do
 
 	it "support division" do
 	    (twelve_meters / 3).must_equal four_meters
-	    (one_meter / 2).must_equal 0
+	    (one_meter / 2).must_equal 0.meters
 	end
     end
 
@@ -142,8 +142,8 @@ describe Units::Literal do
 	end
 
 	it "should allow subtraction of valid units and no units" do
-	    (three_meters - three).must_equal 0
-	    (three - three_meters).must_equal 0
+	    (three_meters - three).must_equal 0.meters
+	    (three - three_meters).must_equal 0.meters
 	end
 
 	it "should reject mixed units when adding" do
