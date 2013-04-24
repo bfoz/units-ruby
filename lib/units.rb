@@ -26,9 +26,9 @@ class Units
     end
 
     def self.parse_symbol(s)
-	m = ABBREVIATION_EXP.match(s.is_a?(String) ? s : s.to_s)
+	m = ABBREVIATION_EXP.match(s.to_s)
 	s = ABBREVIATIONS[m[:abbreviation].to_sym] if m and ABBREVIATIONS.include?(m[:abbreviation].to_sym)
-	m = PARSER_EXP.match(s.is_a?(String) ? s : s.to_s)
+	m = PARSER_EXP.match(s.to_s)
 	if m and UNITS.include?(m[:base].to_sym)
 	    Hash[m.names.map {|n| [n.to_sym, m[n] ? m[n].to_sym : nil] }]
 	else

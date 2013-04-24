@@ -66,7 +66,7 @@ class Units
     UNITS = SI_UNITS + SI_DERIVED + US_CUSTOMARY_UNITS + [:degrees]
     UNIT_ABBREVIATIONS = SI_UNIT_ABBREVIATIONS.merge(US_CUSTOMARY_UNIT_ABBREVIATIONS)
 
-    BASE_CAPTURE = '(?<base>' + UNITS.each {|u| u.to_s }.join('|') + ')'
-    PREFIX_CAPTURE = '(?<prefix>' + PREFIXES.keys.each {|u| u.to_s }.join('|') + ')?'
+    BASE_CAPTURE = '(?<base>' + UNITS.join('|') + ')'
+    PREFIX_CAPTURE = '(?<prefix>' + PREFIXES.keys.join('|') + ')?'
     PARSER_EXP = Regexp.new('\A'+PREFIX_CAPTURE+BASE_CAPTURE+'(s|es)?')
 end
