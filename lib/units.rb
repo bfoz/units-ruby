@@ -9,7 +9,7 @@ UnitsError = Class.new(ArgumentError)
 class Units
     attr_reader :units	# Returns the units hash
 
-    def self.is_valid_unit?(s)
+    def self.valid_unit?(s)
 	s = s.is_a?(String) ? s : s.to_s
 	return true if ABBREVIATION_EXP =~ s
 	m = PARSER_EXP.match(s)
@@ -139,7 +139,7 @@ end
 # Trap missing method calls and look for methods that look like unit names
 module NumericMixin
     def method_missing(id, *args, &block)
-	if Units.is_valid_unit?(id)
+	if Units.valid_unit?(id)
 	    units = Units.new(args.empty? ? id : {id => args[0]})
 
 	    # Float and Fixnum need to be handled specially because they're

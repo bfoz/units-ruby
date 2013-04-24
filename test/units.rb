@@ -7,28 +7,28 @@ describe Units do
 	let(:units_es)  { Units::UNITS.map {|u| (u.to_s + 'es').to_sym } }
 	
 	it "should accept all valid units" do
-	    Units::UNITS.each {|unit| Units.is_valid_unit?(unit).must_equal(true) }
+	    Units::UNITS.each {|unit| Units.valid_unit?(unit).must_equal(true) }
 	end
 
 	it "should accept all valid plural units" do
-	    (units_s + units_es).each {|u| Units.is_valid_unit?(u).must_equal(true) }
+	    (units_s + units_es).each {|u| Units.valid_unit?(u).must_equal(true) }
 	end
 
 	it "should accept all valid prefixed units" do
 	    all = Units::UNITS.map {|u| Units::PREFIXES.keys.map {|p| p.to_s + u.to_s } }
-	    all.flatten.each {|u| Units.is_valid_unit?(u.to_sym).must_equal(true) }
+	    all.flatten.each {|u| Units.valid_unit?(u.to_sym).must_equal(true) }
 	end
 
 	it "should accept all valid abbreviations" do
-	    Units::ABBREVIATIONS.keys.each {|a| Units.is_valid_unit?(a).must_equal(true) }
+	    Units::ABBREVIATIONS.keys.each {|a| Units.valid_unit?(a).must_equal(true) }
 	end
 	
 	it "reject invalid units" do
-	    Units.is_valid_unit?(:foo).wont_equal(true)
+	    Units.valid_unit?(:foo).wont_equal(true)
 	end
 
 	it "reject invalid prefix" do
-	    Units.is_valid_unit?(:foometer).wont_equal(true)
+	    Units.valid_unit?(:foometer).wont_equal(true)
 	end
     end
 
