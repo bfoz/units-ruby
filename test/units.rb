@@ -90,6 +90,11 @@ describe Units do
 	    Units.new(:meters => 1, :inches => 0).must_equal meter
 	    Units.new(:meters => 1, :inches => 1).wont_equal meter
 	end
+
+	it "must have a convenience method for instantiating units" do
+	    Units.meter.must_equal Units.new(:meters)
+	    Units.mm.must_equal Units.new(:millimeters)
+	end
     end
 
     describe "equality" do

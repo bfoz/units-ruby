@@ -16,6 +16,15 @@ class Units
 	m and UNITS.include?( m[:base].to_sym )
     end
 
+    # Trap missing method calls and look for methods that look like unit names
+    def self.method_missing(id, *args, &block)
+	if Units.valid_unit?(id)
+	    units = Units.new(args.empty? ? id : {id => args[0]})
+	else
+	    super if defined?(super)
+	end
+    end
+
     def self.parse_symbol(s)
 	m = ABBREVIATION_EXP.match(s.is_a?(String) ? s : s.to_s)
 	s = ABBREVIATIONS[m[:abbreviation].to_sym] if m and ABBREVIATIONS.include?(m[:abbreviation].to_sym)
