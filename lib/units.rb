@@ -25,6 +25,8 @@ class Units
 	end
     end
 
+    # @param [String,Symbol] symbol The string, or symbol, to parse
+    # @return [Hash]
     def self.parse_symbol(s)
 	m = ABBREVIATION_EXP.match(s.to_s)
 	s = ABBREVIATIONS[m[:abbreviation].to_sym] if m and ABBREVIATIONS.include?(m[:abbreviation].to_sym)
@@ -106,6 +108,35 @@ class Units
 	Units.new(@units.inject({}) {|h,(k,v)| h[k] = -v; h })
     end
 
+    # Convert a value to different units
+    # @param [Numeric]		value	The value to convert
+    # @param [String,Symbol]	target	The units to convert the value to
+    def convert(value, target)
+	target_unit = Units.parse_symbol(target)
+
+	target_base = target_unit[:base]
+	target_conversions = BASE_CONVERSIONS[target_base];
+	raise ArgumentError, "No conversions to '#{target_base}'" unless target_conversions
+
+	source_prefix = self.prefix || 0
+	target_prefix = PREFIXES[target_unit[:prefix]] || 0
+	prefix_multiplier = 10**(source_prefix - target_prefix)
+
+	conversion_factors = @units.select {|k,v| target_conversions.include?(k) }
+	base_multiplier = conversion_factors.map {|k,v| target_conversions[k]**v }.reduce(1) {|accumulator, factor| accumulator * factor }
+
+	value * prefix_multiplier * base_multiplier
+    end
+
+# @group Accessors
+    # @return [Fixnum]	The prefix exponent, or nil if the exponent is zero
+    def prefix
+	@units[:prefix]
+    end
+# @endgroup
+
+# @group Operators
+
     # Define comparison operators
     def eql?(other)
 	self.class.equal?(other.class) && @units == other.units
@@ -137,6 +168,8 @@ class Units
     def /(other)
 	other ? (self * other.invert) : self
     end
+
+# @endgroup
 
     # Return the units for the square root of the receiver
     # @return [Units]

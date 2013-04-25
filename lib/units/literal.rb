@@ -9,9 +9,15 @@ class Units
 	    @units = (units.is_a?(Units) ? units : Units.new(units)) if units
 	end
 
-	# Pass most everything through to the underlying value
+	# Handle conversion methods (to_*) and pass everything else to the wrapped value
 	def method_missing(id, *args)
-	    @value.send(id, *args)
+	    if id.to_s =~ /^to_(.+)$/
+		units = Units.new($1)
+		return self if @units == units
+		self.class.new(@units.convert(@value, $1), units)
+	    else
+		@value.send(id, *args)
+	    end
 	end
 
 	def inspect

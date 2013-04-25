@@ -199,4 +199,31 @@ describe Units::Literal do
     it "should have a to_s method that returns only the literal's to_s" do
 	assert_equal('1', one_meter.to_s)
     end
+
+    describe "when converting to other units" do
+	it "must convert to different units" do
+	    one_meter.to_inches.must_equal 39.3701.inches
+	end
+
+	it "must do nothing when converting to identical units" do
+	    one_meter.to_meters.must_equal one_meter
+	end
+
+	it "must handle prefix-only conversions" do
+	    one_meter.to_millimeters.must_equal 1000.mm
+	end
+
+	it "must handle mixed prefix conversions" do
+	    100.cm.to_inches.must_equal 39.3701.inches
+	    100.inches.to_centimeters.must_equal 254.cm
+	end
+
+	it "must handle converting to abbreviated units" do
+	    100.cm.to_mm.must_equal 1000.mm
+	end
+
+	it "must reject invalid target units" do
+	    -> { 100.cm.to_foo }.must_raise UnitsError
+	end
+    end
 end

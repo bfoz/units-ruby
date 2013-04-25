@@ -12,6 +12,7 @@ license.
 Examples
 --------
 
+### Creating numbers with units
 ```ruby
     require 'units'
 
@@ -19,11 +20,16 @@ Examples
     two_meters = 2.m
     one_inch = 1.inch
 ```
+### Converting units
+```ruby
+    3.meters.to_inches          # => 118.1103 inch
+    10.inches.to_mm             # => 254.0 millimeter
+```
 
 Supported Units
 ----------------
 All of the SI units listed below allow any of the standard
-[SI prefixes](http://en.wikipedia.org/wiki/Metric_prefix) to be appended to the
+[SI prefixes](http://en.wikipedia.org/wiki/Metric_prefix) to be prepended to the
 unit name. Actually, the US Customary units support the SI prefixes too, but
 that's not a typical usage.
 

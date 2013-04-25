@@ -69,4 +69,17 @@ class Units
     BASE_CAPTURE = '(?<base>' + UNITS.join('|') + ')'
     PREFIX_CAPTURE = '(?<prefix>' + PREFIXES.keys.join('|') + ')?'
     PARSER_EXP = Regexp.new('\A'+PREFIX_CAPTURE+BASE_CAPTURE+'(s|es)?')
+
+    # Conversion factors between base units
+    # The hash key is the unit to convert to, the value is a hash keyed on the source unit
+    # So, BASE_CONVERSIONS[:wanted][:have] is the conversion factor from :have units to :wanted units.
+    # For example, BASE_CONVERSIONS[:meter][:inch] yields the conversion from inches to meters.
+    BASE_CONVERSIONS = {
+	inch: {
+	    meter:  39.3701
+	},
+	meter: {
+	    inch:   0.0254
+	}
+    }
 end

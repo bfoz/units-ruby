@@ -160,6 +160,10 @@ describe Units do
 	it "should have a to_abbreviation method" do
 	    Units.new('centimeters').to_abbreviation.must_equal 'cm'
 	end
+
+	it "must have a convert method that converts a value to new units" do
+	    Units.meter.convert(10, 'inch').must_equal 393.701
+	end
     end
 
     it "must square root" do
