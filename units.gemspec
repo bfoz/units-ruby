@@ -6,11 +6,9 @@ Gem::Specification.new do |s|
   s.version     = '2'
   s.authors     = ["Brandon Fosdick"]
   s.email       = ["bfoz@bfoz.net"]
-  s.homepage    = ""
+  s.homepage    = "http://github.com/bfoz/ruby-units"
   s.summary     = %q{Extends Numeric to add support for tracking units of measure}
   s.description = %q{Extends Numeric to add support for tracking units of measure}
-
-  s.rubyforge_project = "units"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
