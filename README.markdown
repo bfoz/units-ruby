@@ -6,7 +6,7 @@ An extension to Ruby's Numeric classes that adds support for units of measure.
 License
 -------
 
-Copyright 2012 Brandon Fosdick <bfoz@bfoz.net> and released under the BSD
+Copyright 2012-2013 Brandon Fosdick <bfoz@bfoz.net> and released under the BSD
 license.
 
 Examples
