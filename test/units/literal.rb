@@ -223,7 +223,7 @@ describe Units::Literal do
 	end
 
 	it "must reject invalid target units" do
-	    -> { 100.cm.to_foo }.must_raise UnitsError
+	    -> { 100.cm.to_foo }.must_raise NoMethodError
 	end
     end
 end

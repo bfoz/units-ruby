@@ -57,7 +57,7 @@ class Units
 	# Check that all keys are valid units and parse them
 	prefix = args[:prefix] ? args.delete(:prefix) : 0
 	args = args.inject({}) do |h,(k,v)|
-	    raise UnitsError, "Invalid Units" unless parsed = Units.parse_symbol(k)
+	    raise UnitsError, "Invalid Units: '#{k}'" unless parsed = Units.parse_symbol(k)
 	    h[parsed[:base]] = v
 	    prefix += PREFIXES[parsed[:prefix]] if parsed[:prefix]
 	    h
