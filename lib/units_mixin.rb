@@ -67,7 +67,7 @@ module UnitsMixin
 	    rescue ArgumentError
 	    end
 	elsif @units or other_units
-	    result_units = (@units or other_units.invert)
+	    result_units = (0 == result) ? @units : (@units or other_units.invert)
 	end
 
 	apply_result_units(result, result_units)

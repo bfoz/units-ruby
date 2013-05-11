@@ -81,7 +81,7 @@ class Units
 	end
 
 	def /(other)
-	    op(:/, other)
+	    (0 == @value) ? self : op(:/, other)
 	end
 	# @endgroup
 
