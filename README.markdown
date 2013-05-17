@@ -1,6 +1,8 @@
 Units for Ruby
 ==============
 
+[![Build Status](https://travis-ci.org/bfoz/ruby-units.png)](https://travis-ci.org/bfoz/ruby-units)
+
 An extension to Ruby's Numeric classes that adds support for units of measure.
 
 License
