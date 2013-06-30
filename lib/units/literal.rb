@@ -44,9 +44,13 @@ class Units
 
 	# Both the values and the units must match for two numbers to be considered equal
 	#  ie. 3.meters != 3.inches != 3
+	# However, 0.units == 0 is a special case to avoid breaking any conditionals
+	# that attempt to avoid dividing by zero
 	def eql?(other)
 	    if other.respond_to?(:units)
 		(@units == other.units) and (@value == other.value)
+	    elsif other == 0
+		@value == other
 	    else
 		(@units == nil) and (@value == other)
 	    end

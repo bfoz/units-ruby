@@ -44,6 +44,10 @@ describe Units::Literal do
 	let(:three_inches)	{ Literal(3, :inches) }
 	let(:three_meters)	{ Literal(3, :meters) }
 
+	it "must equate zero-with-units and zero" do
+	    0.meters.must_equal 0
+	end
+
 	it "should not equate a literal with units and a literal without units" do
 	    three_meters.wont_equal 3
 	end
