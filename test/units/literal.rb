@@ -94,6 +94,7 @@ describe Units::Literal do
 
 	it "should support division" do
 	    (twelve_meters / three_meters).must_equal 4
+	    (0.meters / 3.meters).must_equal 0
 	end
     end
 
