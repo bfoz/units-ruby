@@ -90,6 +90,7 @@ describe Units::Literal do
 
 	it "should support subtraction" do
 	    (four_meters - three_meters).must_equal one_meter
+	    (0.meters - four_meters).must_equal -four_meters
 	end
 
 	it "should support multiplication" do
@@ -109,6 +110,7 @@ describe Units::Literal do
 
 	it "subtraction" do
 	    (4 - three_meters).must_equal one_meter
+	    (0 - four_meters).must_equal -four_meters
 	end
 
 	it "multiplication" do
