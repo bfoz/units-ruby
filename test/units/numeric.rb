@@ -229,4 +229,31 @@ describe Units::Numeric do
 	    -> { 100.cm.to_foo }.must_raise NoMethodError
 	end
     end
+
+    describe 'when converting to other units without the to_ prefix' do
+	it 'must convert to different units' do
+	    one_meter.inches.must_equal 39.3701.inches
+	end
+
+	it 'must do nothing when converting to identical units' do
+	    one_meter.meters.must_equal one_meter
+	end
+
+	it 'must handle prefix-only conversions' do
+	    one_meter.millimeters.must_equal 1000.mm
+	end
+
+	it 'must handle mixed prefix conversions' do
+	    100.cm.inches.must_equal 39.3701.inches
+	    100.inches.centimeters.must_equal 254.cm
+	end
+
+	it 'must handle converting to abbreviated units' do
+	    100.cm.mm.must_equal 1000.mm
+	end
+
+	it 'must reject invalid target units' do
+	    -> { 100.cm.foo }.must_raise NoMethodError
+	end
+    end
 end

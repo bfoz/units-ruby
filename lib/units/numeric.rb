@@ -11,7 +11,10 @@ class Units
 
 	# Handle conversion methods (to_*) and pass everything else to the wrapped value
 	def method_missing(id, *args)
-	    if (id.to_s =~ /^to_(.+)$/) and Units.valid_unit?($1)
+	    if @units.valid_conversion?(id)
+		units = Units.new(id)
+		(@units == units) ? self : self.class.new(@units.convert(@value, id), units)
+	    elsif (id.to_s =~ /^to_(.+)$/) and Units.valid_unit?($1)
 		units = Units.new($1)
 		return self if @units == units
 		self.class.new(@units.convert(@value, $1), units)

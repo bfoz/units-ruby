@@ -170,4 +170,29 @@ describe Units do
 	(Units.new('meters')*Units.new('meters')).square_root.must_equal Units.new('meters')
     end
 
+    describe 'when checking conversion validity' do
+	it 'must accept inches and meters' do
+	    Units.meter.valid_conversion?('inch').must_equal true
+	    Units.inch.valid_conversion?('meter').must_equal true
+	    Units.meter.valid_conversion?(:inch).must_equal true
+	    Units.inch.valid_conversion?(:meter).must_equal true
+	end
+
+	it 'must accept conversion to self' do
+	    Units.meter.valid_conversion?(:meter).must_equal true
+	    Units.meter.valid_conversion?(:mm).must_equal true
+	end
+
+	it 'must accept mixed prefixes' do
+	    Units.inch.valid_conversion?(:mm).must_equal true
+	end
+
+	it 'must reject nonsense conversions' do
+	    Units.meter.valid_conversion?(:foo).must_equal false
+	end
+
+	it 'must reject invalid conversions' do
+	    Units.meter.valid_conversion?(:hertz).must_equal nil
+	end
+    end
 end

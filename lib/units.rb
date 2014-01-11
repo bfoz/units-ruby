@@ -128,6 +128,18 @@ class Units
 	value * prefix_multiplier * base_multiplier
     end
 
+    # Check that the given conversion is valid
+    # @param [String,Symbol]	target	The units to check
+    # @return [Bool]	True if the target units are a valid conversion
+    def valid_conversion?(target)
+	target_unit = Units.parse_symbol(target)
+	return false unless target_unit
+	target_base = target_unit[:base]
+	return true if @units.keys.include?(target_base)
+	conversion_hash = BASE_CONVERSIONS[target_base]
+	conversion_hash && ((@units.keys & conversion_hash.keys).size != 0)
+    end
+
 # @group Accessors
     # @return [Fixnum]	The prefix exponent, or nil if the exponent is zero
     def prefix
