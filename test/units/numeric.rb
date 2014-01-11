@@ -1,29 +1,25 @@
 require 'matrix'
 require 'minitest/autorun'
-require 'units/literal'
+require 'units/numeric'
 
-def Literal(*args)
-    Units::Literal.new(*args)
-end
+describe Units::Numeric do
+    let(:one)	{ Units::Numeric.new(1) }
+    let(:three)	{ Units::Numeric.new(3) }
+    let(:four)	{ Units::Numeric.new(4) }
+    let(:seven)	{ Units::Numeric.new(7) }
+    let(:twelve){ Units::Numeric.new(12) }
 
-describe Units::Literal do
-    let(:one)	{ Literal(1) }
-    let(:three)	{ Literal(3) }
-    let(:four)	{ Literal(4) }
-    let(:seven)	{ Literal(7) }
-    let(:twelve){ Literal(12) }
+    let(:three_inches)	{ Units::Numeric.new(3, :inches) }
+    let(:four_inches)	{ Units::Numeric.new(4, :inches) }
 
-    let(:three_inches)	{ Literal(3, :inches) }
-    let(:four_inches)	{ Literal(4, :inches) }
+    let(:one_meter)	{ Units::Numeric.new(1, :meter) }
+    let(:three_meters)	{ Units::Numeric.new(3, :meters) }
+    let(:four_meters)	{ Units::Numeric.new(4, :meters) }
+    let(:six_meters)	{ Units::Numeric.new(6, :meters) }
+    let(:seven_meters)	{ Units::Numeric.new(7, :meters) }
+    let(:twelve_meters)	{ Units::Numeric.new(12, :meters) }
 
-    let(:one_meter)	{ Literal(1, :meter) }
-    let(:three_meters)	{ Literal(3, :meters) }
-    let(:four_meters)	{ Literal(4, :meters) }
-    let(:six_meters)	{ Literal(6, :meters) }
-    let(:seven_meters)	{ Literal(7, :meters) }
-    let(:twelve_meters)	{ Literal(12, :meters) }
-
-    let(:twelve_meters2)    { Literal(12, Units.new(:meters, :meters)) }
+    let(:twelve_meters2)    { Units::Numeric.new(12, Units.new(:meters, :meters)) }
 
     it "should claim to be a Numeric" do
 	one.must_be_kind_of Numeric
@@ -31,18 +27,18 @@ describe Units::Literal do
 
     describe "when constructing" do
 	it "should require a value" do
-	    lambda { Literal() }.must_raise(ArgumentError)
+	    lambda { Units::Numeric.new }.must_raise(ArgumentError)
 	end
 
 	it "should accept a Unit, but not require it" do
-	    Literal(1).must_equal 1
-	    Literal(1, :meter).must_equal one_meter
+	    Units::Numeric.new(1).must_equal 1
+	    Units::Numeric.new(1, :meter).must_equal one_meter
 	end
     end
 
     describe "equality" do
-	let(:three_inches)	{ Literal(3, :inches) }
-	let(:three_meters)	{ Literal(3, :meters) }
+	let(:three_inches)	{ Units::Numeric.new(3, :inches) }
+	let(:three_meters)	{ Units::Numeric.new(3, :meters) }
 
 	it "must equate zero-with-units and zero" do
 	    0.meters.must_equal 0
@@ -59,8 +55,8 @@ describe Units::Literal do
 
 	it "should preserve normal equality for literals without units" do
 	    three.must_equal three
-	    Literal(3).must_equal 3
-	    Literal(3.5).must_equal 3.5
+	    Units::Numeric.new(3).must_equal 3
+	    Units::Numeric.new(3.5).must_equal 3.5
 	end
     end
 

@@ -1,13 +1,13 @@
-require_relative 'literal'
+require_relative 'numeric'
 
 module Math
     alias :units_sqrt :sqrt
-    # Override Math::sqrt to fix handling of {Literal}s
+    # Override Math::sqrt to fix handling of {Units::Numeric}s
     # @return [Numeric]
     def sqrt(a)
-	if a.kind_of?(Units::Literal)
+	if a.kind_of?(Units::Numeric)
 	    if a.units
-		Units::Literal.new(units_sqrt(a.value), a.units.square_root)
+		Units::Numeric.new(units_sqrt(a.value), a.units.square_root)
 	    else
 		units_sqrt(a.value)
 	    end

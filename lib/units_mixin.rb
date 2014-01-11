@@ -80,7 +80,7 @@ module UnitsMixin
 	    result.units = result_units
 	    result
 	elsif result_units
-	    Units::Literal.new(result, result_units)
+	    Units::Numeric.new(result, result_units)
 	else
 	    result
 	end
@@ -99,6 +99,6 @@ module UnitsMixin
     end
 
     def value_for_other(other)
-	other.kind_of?(Units::Literal) ? other.value : other
+	other.kind_of?(Units::Numeric) ? other.value : other
     end
 end

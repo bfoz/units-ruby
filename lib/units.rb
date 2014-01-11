@@ -1,6 +1,6 @@
 require_relative 'units_mixin'
 require_relative 'units/constants'
-require_relative 'units/literal'
+require_relative 'units/numeric'
 require_relative 'units/math'
 
 # Add an exception class for unsupported operations
@@ -191,7 +191,7 @@ module NumericMixin
 	    #  added to a literal becomes available to all literals of the
 	    #  same value.
 	    if self.is_a?(Fixnum) or self.is_a?(Float)
-		Units::Literal.new(self, units)	# Create a new wrapper object
+		Units::Numeric.new(self, units)	# Create a new wrapper object
 	    else
 		# Check that the class hasn't already been patched
 		#  Numeric's subclasses are patched here, instead of at load-time,

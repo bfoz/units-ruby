@@ -1,7 +1,7 @@
 require_relative '../units'
 
 class Units
-    class Literal < Numeric
+    class Numeric < Numeric
 	attr_reader :units, :value
 
 	def initialize(value, units=nil)
@@ -31,11 +31,11 @@ class Units
 	    @value.to_s
 	end
 
-	# Convert other into something that can handle being divided by {Literal}
+	# Convert other into something that can handle being divided by {Numeric}
 	def coerce(other)
 	    case other
-		when Fixnum then [Literal.new(other), self]
-		when Float  then [Literal.new(other), self]
+		when Fixnum then [Numeric.new(other), self]
+		when Float  then [Numeric.new(other), self]
 		else
 		    other.class.send(:include, UnitsMixin) unless other.kind_of?(UnitsMixin)
 		    [other, self]
@@ -58,7 +58,7 @@ class Units
 	alias == eql?
 
 	def <=>(other)
-	    if other.kind_of? Literal
+	    if other.kind_of? Numeric
 		if @units
 		    @units.eql?(other.units) ? (@value <=> other.value) : nil
 		else
@@ -93,19 +93,19 @@ class Units
 
 	# Generic operator handler
 	def op(sym, other)
-	    if other.kind_of? Literal
-		Literal.new(@value.send(sym, other.value), @units ? (@units.send(sym, other.units)) : ((:/ == sym) && (0 == @value) ? nil : other.units))
+	    if other.kind_of? Numeric
+		Numeric.new(@value.send(sym, other.value), @units ? (@units.send(sym, other.units)) : ((:/ == sym) && (0 == @value) ? nil : other.units))
 	    elsif other.respond_to? :map
 		other.map {|a| self.send(sym, a)}
 	    else
-		Literal.new(@value.send(sym, other), @units ? (@units.send(sym, other.units)) : other.units)
+		Numeric.new(@value.send(sym, other), @units ? (@units.send(sym, other.units)) : other.units)
 	    end
 	rescue UnitsError
 	    raise
 	rescue ArgumentError    # Handle units that cancel out
 	    @value.send(sym, other.value)
 	rescue NoMethodError
-	    Literal.new(@value.send(sym, other), @units)
+	    Numeric.new(@value.send(sym, other), @units)
 	end
     end
 end
