@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.version     = '2.1'
   s.authors     = ["Brandon Fosdick"]
   s.email       = ["bfoz@bfoz.net"]
-  s.homepage    = "http://github.com/bfoz/ruby-units"
+  s.homepage    = 'http://github.com/bfoz/units-ruby'
   s.summary     = %q{Extends Numeric to add support for tracking units of measure}
   s.description = %q{Extends Numeric to add support for tracking units of measure}
 
