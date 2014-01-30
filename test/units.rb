@@ -164,6 +164,10 @@ describe Units do
 	it "must have a convert method that converts a value to new units" do
 	    Units.meter.convert(10, 'inch').must_equal 393.701
 	end
+
+	it 'must convert degrees to radians' do
+	    90.degrees.radians.must_be_close_to Math::PI/2
+	end
     end
 
     it "must square root" do

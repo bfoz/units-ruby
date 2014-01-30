@@ -75,11 +75,17 @@ class Units
     # So, BASE_CONVERSIONS[:wanted][:have] is the conversion factor from :have units to :wanted units.
     # For example, BASE_CONVERSIONS[:meter][:inch] yields the conversion from inches to meters.
     BASE_CONVERSIONS = {
+	degrees: {
+	    radian: 180/Math::PI
+	},
 	inch: {
 	    meter:  39.3701
 	},
 	meter: {
 	    inch:   0.0254
-	}
+	},
+	radian: {
+	    degrees: Math::PI/180
+	},
     }
 end
