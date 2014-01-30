@@ -103,6 +103,12 @@ class Units
     end
     alias_method :to_s, :inspect
 
+    # Override to intercept and check against the current units
+    def is_a?(name)
+	target = Units.parse_symbol(name)
+	(target && @units.include?(target[:base])) || super(name)
+    end
+
     # Create a clone with negated units
     def invert
 	Units.new(@units.inject({}) {|h,(k,v)| h[k] = -v; h })

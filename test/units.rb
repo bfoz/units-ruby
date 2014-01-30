@@ -199,4 +199,14 @@ describe Units do
 	    Units.meter.valid_conversion?(:hertz).must_equal nil
 	end
     end
+
+    describe 'when overriding is_a?' do
+	it 'must be a base unit' do
+	    Units.meters.is_a?(:meters).must_equal true
+	end
+
+	it 'must be a prefixed unit' do
+	    Units.mm.is_a?(:meters).must_equal true
+	end
+    end
 end

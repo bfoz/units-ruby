@@ -256,4 +256,18 @@ describe Units::Numeric do
 	    -> { 100.cm.foo }.must_raise NoMethodError
 	end
     end
+
+    describe 'when asked about its units' do
+	it 'must be degrees' do
+	    90.degrees.degrees?.must_equal true
+	end
+
+	it 'must be meters' do
+	    1.meter.meters?.must_equal true
+	end
+
+	it 'must be inches' do
+	    1.inch.inch?.must_equal true
+	end
+    end
 end
