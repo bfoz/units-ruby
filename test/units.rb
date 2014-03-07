@@ -120,6 +120,12 @@ describe Units do
 	end
     end
 
+    describe 'arithmetic with like units' do
+	it 'must exponentiate' do
+	    (Units.meters**2).must_equal Units.new(meters:2)
+	end
+    end
+
     describe "arithmetic with mixed units" do
 	let(:meter) { Units.new(:meters) }
 

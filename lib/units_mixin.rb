@@ -14,6 +14,8 @@ module UnitsMixin
 	    alias_method :*, :multiply
 	    alias_method :unitsmethods_original_division, :/
 	    alias_method :/, :divide
+	    alias_method :unitsmethods_original_exponent, :**
+	    alias_method :**, :exponent
 	end
     end
 
@@ -71,6 +73,11 @@ module UnitsMixin
 	end
 
 	apply_result_units(result, result_units)
+    end
+
+    def exponent(power)
+	result = unitsmethods_original_exponent(power)
+	apply_result_units(result, units ? (units ** power) : nil)
     end
 
     private

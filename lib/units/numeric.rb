@@ -93,6 +93,10 @@ class Units
 	def /(other)
 	    op(:/, other)
 	end
+
+	def **(power)
+	    self.class.new(@value ** power, @units ? (@units ** power) : nil)
+	end
 	# @endgroup
 
 	private

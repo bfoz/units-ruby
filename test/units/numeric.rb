@@ -97,6 +97,11 @@ describe Units::Numeric do
 	    (twelve_meters / three_meters).must_equal 4
 	    (0.meters / 3.meters).must_equal 0
 	end
+
+	it 'must support exponentiation' do
+	    (3.meters**2).must_equal 9.meters(2)
+	    (Rational(3,1).meters**2).must_equal Rational(9,1).meters(2)
+	end
     end
 
     describe "coerced arithmetic" do

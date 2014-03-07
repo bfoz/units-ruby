@@ -188,6 +188,12 @@ class Units
 	other ? (self * other.invert) : self
     end
 
+    # Raise the units to the power of power
+    # @param power [Number] the power to raise everything to
+    def **(power)
+	Units.new(@units.inject({}) {|h,(unit,exponent)| h[unit] = power * exponent; h })
+    end
+
 # @endgroup
 
     # Return the units for the square root of the receiver
