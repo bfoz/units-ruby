@@ -1,7 +1,7 @@
 module NumericMixin
     # Trap missing method calls and look for methods that look like unit names
     def method_missing(id, *args, &block)
-	if Units.valid_unit?(id)
+	if !block_given? && Units.valid_unit?(id)
 	    units = Units.new(args.empty? ? id : {id => args[0]})
 
 	    # Float and Fixnum need to be handled specially because they're
