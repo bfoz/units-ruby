@@ -1,4 +1,4 @@
-require_relative 'numeric_mixin'
+require_relative 'numeric'
 require_relative 'units_mixin'
 require_relative 'units/constants'
 require_relative 'units/numeric'
@@ -195,10 +195,4 @@ class Units
     def square_root
 	Units.new(@units.inject({}) {|h,(k,v)| h[k] = v/2; h })
     end
-end
-
-# Monkey patch Numeric with a module so that super will work properly in the
-#   patched methods
-class Numeric
-    include NumericMixin
 end
