@@ -56,7 +56,7 @@ class Units
 	args = args.select {|key, value| value != 0}
 
 	# Check that all keys are valid units and parse them
-	prefix = args[:prefix] ? args.delete(:prefix) : 0
+	prefix = args.delete(:prefix) || 0
 	args = args.inject({}) do |h,(k,v)|
 	    raise UnitsError, "Invalid Units: '#{k}'" unless parsed = Units.parse_symbol(k)
 	    h[parsed[:base]] = v
@@ -175,14 +175,14 @@ class Units
 
     def +(other)
 	raise UnitsError, "Addition requires matching units: #{self} != #{other}" unless (self == other) || !other
-	Units.new(@units)
+	self.class.new(@units)
     end
     def -(other)
 	raise UnitsError, "Subtraction requires matching units: #{self} != #{other}" unless (self == other) || !other
-	Units.new(@units)
+	self.class.new(@units)
     end
     def *(other)
-	Units.new(@units.merge(other ? other.units : {}) {|k, left, right| left + right })
+	self.class.new(@units.merge(other ? other.units : {}) {|k, left, right| left + right })
     end
     def /(other)
 	other ? (self * other.invert) : self
@@ -191,7 +191,7 @@ class Units
     # Raise the units to the power of power
     # @param power [Number] the power to raise everything to
     def **(power)
-	Units.new(@units.inject({}) {|h,(unit,exponent)| h[unit] = power * exponent; h })
+	self.class.new(@units.inject({}) {|h,(unit,exponent)| h[unit] = power * exponent; h })
     end
 
 # @endgroup
@@ -199,6 +199,6 @@ class Units
     # Return the units for the square root of the receiver
     # @return [Units]
     def square_root
-	Units.new(@units.inject({}) {|h,(k,v)| h[k] = v/2; h })
+	self.class.new(@units.inject({}) {|h,(k,v)| h[k] = v/2; h })
     end
 end

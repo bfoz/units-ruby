@@ -94,7 +94,7 @@ module UnitsMixin
     end
 
     def units_for_other(other)
-	other_units = other.respond_to?(:units) ? other.units : nil
+	other.respond_to?(:units) ? other.units : nil
     end
 
     def units_op(op, other_units)

@@ -104,18 +104,18 @@ class Units
 	# Generic operator handler
 	def op(sym, other)
 	    if other.kind_of? Numeric
-		Numeric.new(@value.send(sym, other.value), @units ? (@units.send(sym, other.units)) : ((:/ == sym) && (0 == @value) ? nil : other.units))
+		self.class.new(@value.send(sym, other.value), @units ? (@units.send(sym, other.units)) : ((:/ == sym) && (0 == @value) ? nil : other.units))
 	    elsif other.respond_to? :map
 		other.map {|a| self.send(sym, a)}
 	    else
-		Numeric.new(@value.send(sym, other), @units ? (@units.send(sym, other.units)) : other.units)
+		self.class.new(@value.send(sym, other), @units ? (@units.send(sym, other.units)) : other.units)
 	    end
 	rescue UnitsError
 	    raise
 	rescue ArgumentError    # Handle units that cancel out
 	    @value.send(sym, other.value)
 	rescue NoMethodError
-	    Numeric.new(@value.send(sym, other), @units)
+	    self.class.new(@value.send(sym, other), @units)
 	end
     end
 end

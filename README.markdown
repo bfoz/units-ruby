@@ -22,10 +22,20 @@ Examples
     two_meters = 2.m
     one_inch = 1.inch
 ```
+
+**Note** that you can't use `1.in` because 'in' is a reserved word in Ruby.
+
+You can also make fancier units by passing arguments...
+
+```ruby
+    square_meters = 3.meters(2)
+    speed = 3.meters.second(-1)
+```
+
 ### Converting units
 ```ruby
-    3.meters.to_inches          # => 118.1103 inch
-    10.inches.to_mm             # => 254.0 millimeter
+    3.meters.inches          # => 118.1103 inch
+    10.inches.mm             # => 254.0 millimeter
 ```
 
 Supported Units
