@@ -42,5 +42,11 @@ class Units
 	def to_s(operator=' ')
 	    operands.map {|op| op.is_a?(self.class) ? ('(' + op.to_s + ')') : op}.join(operator)
 	end
+
+	# @group Numeric
+	def abs2
+	    self * self
+	end
+	# @endgroup
     end
 end

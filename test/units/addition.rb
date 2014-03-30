@@ -31,4 +31,10 @@ describe Units::Addition do
     it 'must convert all operands to a desired unit' do
 	subject.to_foot.must_be_close_to 10.1758532.foot
     end
+
+    describe 'when pretending to be a Numeric' do
+	it 'must have an abs2 method' do
+	    subject.abs2.must_equal (subject * subject)
+	end
+    end
 end
