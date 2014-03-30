@@ -5,6 +5,7 @@ class Units
 	attr_reader :operands
 
 	def initialize(*args)
+	    raise ArgumentError, "Can't initialize #{self.class} without arguments" if args.empty?
 	    @operands = Array(args)
 	end
 
