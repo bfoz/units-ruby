@@ -28,6 +28,18 @@ describe Units::Division do
 	(subject / subject).must_equal Units::Division.new(subject, subject)
     end
 
+    it 'must not add zero' do
+	(subject + 0).must_equal subject
+    end
+
+    it 'must not subtract 0' do
+	(subject - 0).must_equal subject
+    end
+
+    it 'must return 0 when multiplied by 0' do
+	(subject * 0).must_equal 0
+    end
+
     describe 'when operating on an Addition operator' do
 	let(:addition) { Units::Addition.new 3.meters, 5.foot }
 
@@ -83,6 +95,11 @@ describe Units::Division do
 
 	it 'must have an abs2 method' do
 	    subject.abs2.must_equal (subject * subject)
+	end
+
+	it 'must have a zero? method' do
+	    subject.zero?.must_equal false
+	    Units::Division.new(0.meters, 4.inches).zero?.must_equal true
 	end
     end
 end

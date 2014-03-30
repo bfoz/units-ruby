@@ -23,11 +23,12 @@ class Units
 	end
 
 	def *(other)
-	    self.class.new *(operands.map {|operand| operand.send(:*, other) })
+	    return other if other.zero?
+	    self.class.new *(operands.map {|operand| operand * other })
 	end
 
 	def /(other)
-	    self.class.new *(operands.map {|operand| operand.send(:/, other) })
+	    self.class.new *(operands.map {|operand| operand / other })
 	end
 
 	# Convert other into something that can handle being divided by {Numeric}
@@ -55,6 +56,10 @@ class Units
 	# @group Numeric
 	def abs2
 	    self * self
+	end
+
+	def zero?
+	    operands.all? {|operand| operand.zero? }
 	end
 	# @endgroup
     end

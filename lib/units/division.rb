@@ -8,14 +8,18 @@ class Units
 	end
 
 	def +(other)
+	    return self.dup if other.zero?
 	    Units::Addition.new(self, other)
 	end
 
 	def -(other)
+	    return self.dup if other.zero?
 	    Units::Subtraction.new(self, other)
 	end
 
 	def *(other)
+	    return other if other.zero?
+
 	    case other
 		when Units::Addition	then other * self
 		when Units::Subtraction	then other * self
@@ -43,5 +47,11 @@ class Units
 	def to_s
 	    super ' / '
 	end
+
+	# @group Numeric
+	def zero?
+	    operands.any? {|operand| operand.zero? }
+	end
+	# @endgroup
     end
 end

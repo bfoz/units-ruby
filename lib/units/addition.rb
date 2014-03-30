@@ -3,6 +3,8 @@ require_relative 'operator'
 class Units
     class Addition < Operator
 	def +(other)
+	    return self.dup if other.zero?
+
 	    case other
 		when self.class	then self.class.new(*operands, *other.operands)
 		else self.class.new(*operands, other)
@@ -10,10 +12,13 @@ class Units
 	end
 
 	def -(other)
+	    return self.dup if other.zero?
 	    Units::Subtraction.new(self, other)
 	end
 
 	def *(other)
+	    return other if other.zero?
+
 	    case other
 		when Units::Addition
 		    self.class.new *(operands.product(other.operands).map {|a,b| a*b})

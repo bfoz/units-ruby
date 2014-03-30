@@ -171,16 +171,22 @@ describe Units::Numeric do
     end
 
     describe 'arithmetic with proxy objects' do
+	let(:addition) { Units::Addition.new(2.inch, 3.foot) }
+	let(:subtraction)   { Units::Subtraction.new(2.inch, 3.foot) }
+
 	it 'must add an Addition proxy' do
-	    (1.meter + Units::Addition.new(2.inch, 3.foot)).must_equal Units::Addition.new(1.meter, 2.inch, 3.foot)
+	    (1.meter + addition).must_equal Units::Addition.new(1.meter, 2.inch, 3.foot)
+	    (0.meter + addition).must_equal addition
 	end
 
 	it 'must subtract an Addition proxy' do
-	    (1.meter - Units::Addition.new(2.inch, 3.foot)).must_equal Units::Subtraction.new(1.meter, Units::Addition.new(2.inch, 3.foot))
+	    (1.meter - addition).must_equal Units::Subtraction.new(1.meter, addition)
+	    (0.meter - addition).must_equal Units::Subtraction.new(0.meter, addition)
 	end
 
 	it 'must add a Subtraction proxy' do
-	    (1.meter + Units::Subtraction.new(2.inch, 3.foot)).must_equal Units::Addition.new(1.meter, Units::Subtraction.new(2.inch, 3.foot))
+	    (1.meter + subtraction).must_equal Units::Addition.new(1.meter, subtraction)
+	    (0.meter + subtraction).must_equal subtraction
 	end
 
 	it 'must subtract a Subtraction proxy' do
@@ -188,11 +194,13 @@ describe Units::Numeric do
 	end
 
 	it 'must multiply by a proxy object' do
-	    (2.meter * Units::Addition.new(2.inch, 3.foot)).must_equal Units::Addition.new(2.meter * 2.inch, 2.meter * 3.foot)
+	    (2.meter * addition).must_equal Units::Addition.new(2.meter * 2.inch, 2.meter * 3.foot)
+	    (0.meter * addition).must_equal 0.meter
 	end
 
 	it 'must divide by a proxy object' do
 	    (4.meter / Units::Addition.new(1.inch, 2.foot)).must_equal Units::Division.new(4.meter, Units::Addition.new(1.inch, 2.foot))
+	    (0.meter / Units::Addition.new(1.inch, 2.foot)).must_equal 0
 	end
     end
 
