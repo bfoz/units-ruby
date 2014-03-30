@@ -33,7 +33,7 @@ class Units
 	    # Check this before valid_conversion? because valid_conversion? has low standards
 	    if (name.to_s =~ /(.+)\?$/) and Units.valid_unit?($1)
 		true
-	    elsif @units.valid_conversion?(name)
+	    elsif @units and @units.valid_conversion?(name)
 		true
 	    elsif (name.to_s =~ /^to_(.+)$/) and Units.valid_unit?($1)
 		true
