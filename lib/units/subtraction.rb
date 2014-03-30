@@ -1,4 +1,5 @@
 require_relative 'operator'
+require_relative 'division'
 
 class Units
     class Subtraction < Operator
@@ -7,7 +8,17 @@ class Units
 	end
 
 	def -(other)
-	    self.class.new(*operands, other)
+	    case other
+		when Units::Subtraction then self.class.new(self, other)
+		else self.class.new(*operands, other)
+	    end
+	end
+
+	def /(other)
+	    case other
+		when Units::Subtraction then Units::Division.new(self, other)
+		else super
+	    end
 	end
 
 	# Handle conversion methods (to_*) and pass everything else to the wrapped value

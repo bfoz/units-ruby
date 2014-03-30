@@ -3,11 +3,32 @@ require_relative 'operator'
 class Units
     class Addition < Operator
 	def +(other)
-	    self.class.new(*operands, other)
+	    case other
+		when self.class	then self.class.new(*operands, *other.operands)
+		else self.class.new(*operands, other)
+	    end
 	end
 
 	def -(other)
 	    Units::Subtraction.new(self, other)
+	end
+
+	def *(other)
+	    case other
+		when Units::Addition
+		    self.class.new *(operands.product(other.operands).map {|a,b| a*b})
+		else
+		    super
+	    end
+	end
+
+	def /(other)
+	    case other
+		when Units::Addition
+		    Units::Division.new(self, other)
+		else
+		    super
+	    end
 	end
 
 	# Handle conversion methods (to_*) and pass everything else to the wrapped value

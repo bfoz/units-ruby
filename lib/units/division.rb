@@ -1,4 +1,5 @@
 require_relative 'operator'
+require_relative 'addition'
 
 class Units
     class Division < Operator
@@ -11,11 +12,17 @@ class Units
 	end
 
 	def *(other)
-	    self.class.new(operands.first * other, *(operands.drop(1)))
+	    case other
+		when Units::Division then self.class.new *(operands.zip(other.operands).map {|a,b| (a && b) ? (a * b) : (a || b)})
+		else self.class.new(operands.first * other, *(operands.drop(1)))
+	    end
 	end
 
 	def /(other)
-	    self.class.new(operands.first, *(operands.drop(1)), other)
+	    case other
+		when Units::Division then self.class.new(self, other)
+		else self.class.new(operands.first, *(operands.drop(1)), other)
+	    end
 	end
 
 	# Handle conversion methods (to_*) and pass everything else to the wrapped value
