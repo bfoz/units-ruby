@@ -78,10 +78,16 @@ class Units
 	degrees: {
 	    radian: 180/Math::PI
 	},
+	foot: {
+	    inch:   0.0833333,
+	    meter:  3.28084
+	},
 	inch: {
+	    foot:   12,
 	    meter:  39.3701
 	},
 	meter: {
+	    foot:   0.3048,
 	    inch:   0.0254
 	},
 	radian: {

@@ -154,12 +154,12 @@ describe Units::Numeric do
 	    (three - three_meters).must_equal 0.meters
 	end
 
-	it "should reject mixed units when adding" do
-	    lambda { three_meters + three_inches }.must_raise UnitsError
+	it 'must return a proxy object when adding mixed units' do
+	    (three_meters + three_inches).must_equal Units::Addition.new(three_meters, three_inches)
 	end
 
-	it "should reject mixed units when subtracting" do
-	    lambda { three_meters - four_inches }.must_raise UnitsError
+	it 'must return a proxy object when subtracting mixed units' do
+	    (three_meters - four_inches).must_equal Units::Subtraction.new(three_meters, four_inches)
 	end
 
 	it "must return a Vector when multiplying a Vector" do
@@ -167,6 +167,32 @@ describe Units::Numeric do
 	    v.must_be_kind_of Vector
 	    v[0].must_equal three_meters
 	    v[1].must_equal six_meters
+	end
+    end
+
+    describe 'arithmetic with proxy objects' do
+	it 'must add an Addition proxy' do
+	    (1.meter + Units::Addition.new(2.inch, 3.foot)).must_equal Units::Addition.new(1.meter, 2.inch, 3.foot)
+	end
+
+	it 'must subtract an Addition proxy' do
+	    (1.meter - Units::Addition.new(2.inch, 3.foot)).must_equal Units::Subtraction.new(1.meter, Units::Addition.new(2.inch, 3.foot))
+	end
+
+	it 'must add a Subtraction proxy' do
+	    (1.meter + Units::Subtraction.new(2.inch, 3.foot)).must_equal Units::Addition.new(1.meter, Units::Subtraction.new(2.inch, 3.foot))
+	end
+
+	it 'must subtract a Subtraction proxy' do
+	    (1.meter - Units::Subtraction.new(2.inch, 3.foot)).must_equal Units::Subtraction.new(1.meter, Units::Subtraction.new(2.inch, 3.foot))
+	end
+
+	it 'must multiply by a proxy object' do
+	    (2.meter * Units::Addition.new(2.inch, 3.foot)).must_equal Units::Addition.new(2.meter * 2.inch, 2.meter * 3.foot)
+	end
+
+	it 'must divide by a proxy object' do
+	    (4.meter / Units::Addition.new(1.inch, 2.foot)).must_equal Units::Division.new(4.meter, Units::Addition.new(1.inch, 2.foot))
 	end
     end
 

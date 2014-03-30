@@ -123,7 +123,7 @@ class Units
 
 	target_base = target_unit[:base]
 	target_conversions = BASE_CONVERSIONS[target_base];
-	raise ArgumentError, "No conversions to '#{target_base}'" unless target_conversions
+	raise ArgumentError, "No conversions to '#{target_base}' from '#{self}'" unless target_conversions
 
 	source_prefix = self.prefix || 0
 	target_prefix = PREFIXES[target_unit[:prefix]] || 0

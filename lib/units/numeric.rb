@@ -1,4 +1,7 @@
 require_relative '../units'
+require_relative 'addition'
+require_relative 'division'
+require_relative 'subtraction'
 
 class Units
     class Numeric < Numeric
@@ -26,6 +29,19 @@ class Units
 	    end
 	end
 
+	def respond_to_missing?(name, include_private = false)
+	    # Check this before valid_conversion? because valid_conversion? has low standards
+	    if (name.to_s =~ /(.+)\?$/) and Units.valid_unit?($1)
+		true
+	    elsif @units.valid_conversion?(name)
+		true
+	    elsif (name.to_s =~ /^to_(.+)$/) and Units.valid_unit?($1)
+		true
+	    else
+		super
+	    end
+	end
+
 	def inspect
 	    if @units
 		@value.inspect + ' ' + @units.inspect
@@ -37,11 +53,11 @@ class Units
 	    @value.to_s
 	end
 
-	# Convert other into something that can handle being divided by {Numeric}
+	# Convert other into something that can work with a {Numeric}
 	def coerce(other)
 	    case other
-		when Fixnum then [Numeric.new(other), self]
-		when Float  then [Numeric.new(other), self]
+		when Fixnum then [self.class.new(other), self]
+		when Float  then [self.class.new(other), self]
 		else
 		    other.class.send(:include, UnitsMixin) unless other.kind_of?(UnitsMixin)
 		    [other, self]
@@ -79,19 +95,33 @@ class Units
 
 	# @group Arithmetic
 	def +(other)
-	    op(:+, other)
+	    case other
+		when Units::Addition	then Units::Addition.new(self, *other.operands)
+		when Units::Subtraction	then Units::Addition.new(self, other)
+		when Units::Division	then Units::Addition.new(self, other)
+		else op(:+, other)
+	    end
 	end
 
 	def -(other)
-	    op(:-, other)
+	    case other
+		when Units::Operator	then Units::Subtraction.new(self, other)
+		else op(:-, other)
+	    end
 	end
 
 	def *(other)
-	    op(:*, other)
+	    case other
+		when Units::Operator	then other * self
+		else op(:*, other)
+	    end
 	end
 
 	def /(other)
-	    op(:/, other)
+	    case other
+		when Units::Operator	then Units::Division.new(self, other)
+		else op(:/, other)
+	    end
 	end
 
 	def **(power)
@@ -104,7 +134,16 @@ class Units
 	# Generic operator handler
 	def op(sym, other)
 	    if other.kind_of? Numeric
-		self.class.new(@value.send(sym, other.value), @units ? (@units.send(sym, other.units)) : ((:/ == sym) && (0 == @value) ? nil : other.units))
+		begin
+		    result_units = @units ? @units.send(sym, other.units) : ((:/ == sym) && (0 == @value) ? nil : other.units)
+		rescue UnitsError
+		    case sym
+			when :+ then Units::Addition.new(self, other)
+			when :- then Units::Subtraction.new(self, other)
+		    end
+		else
+		    self.class.new(@value.send(sym, other.value), result_units)
+		end
 	    elsif other.respond_to? :map
 		other.map {|a| self.send(sym, a)}
 	    else
