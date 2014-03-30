@@ -9,6 +9,7 @@ class Units
 
 	def -(other)
 	    case other
+		when Units::Addition	then self.class.new(*operands, *other.operands)
 		when Units::Subtraction then self.class.new(self, other)
 		else self.class.new(*operands, other)
 	    end

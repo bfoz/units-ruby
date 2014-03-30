@@ -28,6 +28,46 @@ describe Units::Subtraction do
 	(subject / subject).must_equal Units::Division.new(subject, subject)
     end
 
+    describe 'when operating on an Addition operator' do
+	let(:addition) { Units::Addition.new 3.meters, 5.foot }
+
+	it 'must add' do
+	    (subject + addition).must_equal Units::Addition.new(subject, addition)
+	end
+
+	it 'must subtract' do
+	    (subject - addition).must_equal Units::Subtraction.new(3.meters, 4.inches, 3.meters, 5.foot)
+	end
+
+	it 'must multiply' do
+	    (subject * addition).must_equal Units::Subtraction.new(3.meters * addition, 4.inches * addition)
+	end
+
+	it 'must divide' do
+	    (subject / addition).must_equal Units::Subtraction.new(3.meters / addition, 4.inches / addition)
+	end
+    end
+
+    describe 'when operating on a Division operator' do
+	let(:division) { Units::Division.new 3.meters, 5.foot }
+
+	it 'must add' do
+	    (subject + division).must_equal Units::Addition.new(subject, division)
+	end
+
+	it 'must subtract' do
+	    (subject - division).must_equal Units::Subtraction.new(3.meters, 4.inches, division)
+	end
+
+	it 'must multiply' do
+	    (subject * division).must_equal Units::Subtraction.new(3.meters * division, 4.inches * division)
+	end
+
+	it 'must divide' do
+	    (subject / division).must_equal Units::Subtraction.new(3.meters / division, 4.inches / division)
+	end
+    end
+
     it 'must convert all operands to a desired unit' do
 	subject.to_foot.must_be_close_to 9.509.foot
     end

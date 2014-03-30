@@ -17,6 +17,8 @@ class Units
 
 	def *(other)
 	    case other
+		when Units::Addition	then other * self
+		when Units::Subtraction	then other * self
 		when Units::Division then self.class.new *(operands.zip(other.operands).map {|a,b| (a && b) ? (a * b) : (a || b)})
 		else self.class.new(operands.first * other, *(operands.drop(1)))
 	    end

@@ -28,6 +28,46 @@ describe Units::Addition do
 	(subject / subject).must_equal Units::Division.new(subject, subject)
     end
 
+    describe 'when operating on a Division operator' do
+	let(:division) { Units::Division.new 3.meters, 5.foot }
+
+	it 'must add' do
+	    (subject + division).must_equal Units::Addition.new(3.meters, 4.inches, division)
+	end
+
+	it 'must subtract' do
+	    (subject - division).must_equal Units::Subtraction.new(subject, division)
+	end
+
+	it 'must multiply' do
+	    (subject * division).must_equal Units::Addition.new(3.meters * division, 4.inches * division)
+	end
+
+	it 'must divide' do
+	    (subject / division).must_equal Units::Addition.new(3.meters / division, 4.inches / division)
+	end
+    end
+
+    describe 'when operating on a Subtraction operator' do
+	let(:subtraction) { Units::Subtraction.new(3.meters, 4.meters) }
+
+	it 'must add a subtraction' do
+	    (subject + subtraction).must_equal Units::Addition.new(3.meters, 4.inches, subtraction)
+	end
+
+	it 'must subtract a subtraction' do
+	    (subject - subtraction).must_equal Units::Subtraction.new(subject, subtraction)
+	end
+
+	it 'must multiply by a subtraction' do
+	    (subject * subtraction).must_equal Units::Addition.new(3.meters * subtraction, 4.inches * subtraction)
+	end
+
+	it 'must divide by a subtraction' do
+	    (subject / subtraction).must_equal Units::Addition.new(3.meters / subtraction, 4.inches / subtraction)
+	end
+    end
+
     it 'must convert all operands to a desired unit' do
 	subject.to_foot.must_be_close_to 10.1758532.foot
     end
