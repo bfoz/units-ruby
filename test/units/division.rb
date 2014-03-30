@@ -33,6 +33,14 @@ describe Units::Division do
     end
 
     describe 'when pretending to be a Numeric' do
+	it 'must have an unary plus method' do
+	    (+subject).must_equal subject
+	end
+
+	it 'must have an unary minus method' do
+	    (-subject).must_equal Units::Division.new(-3.meters, 4.inches)
+	end
+
 	it 'must have an abs2 method' do
 	    subject.abs2.must_equal (subject * subject)
 	end

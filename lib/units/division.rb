@@ -3,6 +3,10 @@ require_relative 'addition'
 
 class Units
     class Division < Operator
+	def -@
+	    self.class.new -operands.first, *(operands.drop(1))
+	end
+
 	def +(other)
 	    Units::Addition.new(self, other)
 	end

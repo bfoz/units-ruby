@@ -13,6 +13,14 @@ class Units
 	end
 	alias :== :eql?
 
+	def +@
+	    self
+	end
+
+	def -@
+	    self.class.new *(operands.map {|operand| -operand })
+	end
+
 	def *(other)
 	    self.class.new *(operands.map {|operand| operand.send(:*, other) })
 	end
