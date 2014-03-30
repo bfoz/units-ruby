@@ -37,5 +37,10 @@ class Units
 		super
 	    end
 	end
+
+	# This is meant to be called from subclasses, but won't explode if called directly
+	def to_s(operator=' ')
+	    operands.map {|op| op.is_a?(self.class) ? ('(' + op.to_s + ')') : op}.join(operator)
+	end
     end
 end

@@ -26,5 +26,9 @@ class Units
 		super
 	    end
 	end
+
+	def to_s
+	    super ' / '
+	end
     end
 end
