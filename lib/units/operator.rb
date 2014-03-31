@@ -35,7 +35,8 @@ class Units
 
 	def *(other)
 	    return other if other.zero?
-	    self.class.new *(operands.map {|operand| operand * other })
+	    operands.map {|operand| operand * other }
+		    .reduce {|result, operand| result.send(operator, operand)}
 	end
 
 	def /(other)
@@ -61,7 +62,7 @@ class Units
 
 	# This is meant to be called from subclasses, but won't explode if called directly
 	def to_s(operator=' ')
-	    operands.map {|op| op.is_a?(self.class) ? ('(' + op.to_s + ')') : op}.join(operator)
+	    operands.map {|op| op.is_a?(Units::Operator) ? ('(' + op.to_s + ')') : op}.join(operator)
 	end
 
 	# @group Math
@@ -81,6 +82,14 @@ class Units
 	# @endgroup
 
     private
+
+	def operator
+	    case self
+		when Units::Addition then :+
+		when Units::Division then :/
+		when Units::Subtraction then :-
+	    end
+	end
 
 	# Reduce the length of the operand list by applying the operator to any operand pairs that won't produce more proxy objects
 	# @param operator [Symbol]  The operator to apply to the operands

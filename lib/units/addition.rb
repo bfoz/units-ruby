@@ -16,17 +16,6 @@ class Units
 	    end
 	end
 
-	def *(other)
-	    return other if other.zero?
-
-	    case other
-		when Units::Addition
-		    self.class.new(*reduce(:+, *(operands.product(other.operands).map {|a,b| a*b})))
-		else
-		    super
-	    end
-	end
-
 	def /(other)
 	    case other
 		when Units::Addition
