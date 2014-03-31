@@ -60,19 +60,23 @@ module UnitsMixin
     end
 
     def divide(other)
-	result = unitsmethods_original_division(value_for_other(other))
+	if other.is_a? Units::Operator
+	    Units::Division.new(self, other)
+	else
+	    result = unitsmethods_original_division(value_for_other(other))
 
-	other_units = units_for_other(other)
-	if @units and other_units
-	    begin
-		result_units = @units / other_units
-	    rescue ArgumentError
+	    other_units = units_for_other(other)
+	    if @units and other_units
+		begin
+		    result_units = @units / other_units
+		rescue ArgumentError
+		end
+	    elsif @units or other_units
+		result_units = (0 == result) ? @units : (@units or other_units.invert)
 	    end
-	elsif @units or other_units
-	    result_units = (0 == result) ? @units : (@units or other_units.invert)
-	end
 
-	apply_result_units(result, result_units)
+	    apply_result_units(result, result_units)
+	end
     end
 
     def exponent(power)
