@@ -7,7 +7,7 @@ describe Units::Addition do
     it 'must have an addition operator that returns a new proxy' do
 	(subject + 5).must_equal Units::Addition.new(3.meters, 4.inches, 5)
 	(5 + subject).must_equal Units::Addition.new(5, 3.meters, 4.inches)
-	(subject + subject).must_equal Units::Addition.new(3.meters, 4.inches, 3.meters, 4.inches)
+	(subject + subject).must_equal Units::Addition.new(6.meters, 8.inches)
     end
 
     it 'must have a subtraction operator that returns a new proxy' do
@@ -38,6 +38,10 @@ describe Units::Addition do
 
     it 'must return 0 when multiplied by 0' do
 	(subject * 0).must_equal 0
+    end
+
+    it 'must collapse compatible operands when adding' do
+	(subject + 5.inches).must_equal Units.Addition(3.meters, 9.inches)
     end
 
     describe 'when operating on a Division operator' do

@@ -106,6 +106,7 @@ class Units
 
 	def -(other)
 	    case other
+		when Units::Addition	then units ? (Units.Subtraction(self) - other) : Units.Subtraction(self, other)
 		when Units::Operator	then Units::Subtraction.new(self, other)
 		else op(:-, other)
 	    end

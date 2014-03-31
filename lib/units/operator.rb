@@ -78,5 +78,26 @@ class Units
 	    operands.all? {|operand| operand.zero? }
 	end
 	# @endgroup
+
+    private
+
+	# Reduce the length of the operand list by applying the operator to any operand pairs that won't produce more proxy objects
+	# @param operator [Symbol]  The operator to apply to the operands
+	def reduce(operator, *args)
+	    args.reduce([]) do |memo, operand|
+		skip = false
+		memo.map! do |lhs|
+		    next lhs if skip
+		    result = lhs.send(operator, operand)
+		    if result.is_a?(Numeric)
+			skip = true
+			result
+		    else
+			lhs
+		    end
+		end
+		skip ? memo : memo.push(operand)
+	    end
+	end
     end
 end

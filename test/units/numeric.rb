@@ -180,8 +180,8 @@ describe Units::Numeric do
 	end
 
 	it 'must subtract an Addition proxy' do
-	    (1.meter - addition).must_equal Units::Subtraction.new(1.meter, addition)
-	    (0.meter - addition).must_equal Units::Subtraction.new(0.meter, addition)
+	    (1.meter - addition).must_equal Units.Subtraction(1.meter, 2.inch, 3.foot)
+	    (0.meter - addition).must_equal Units::Subtraction.new(0.meter, 2.inch, 3.foot)
 	end
 
 	it 'must add a Subtraction proxy' do

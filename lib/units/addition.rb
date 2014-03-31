@@ -7,8 +7,12 @@ class Units
 	    return self.dup if other.zero?
 
 	    case other
-		when self.class	then self.class.new(*operands, *other.operands)
-		else self.class.new(*operands, other)
+		when self.class
+		    self.class.new(*reduce(:+, *operands, *other.operands))
+		when Numeric
+		    self.class.new(*reduce(:+, *operands, other))
+		else
+		    self.class.new(*operands, other)
 	    end
 	end
 
@@ -17,7 +21,7 @@ class Units
 
 	    case other
 		when Units::Addition
-		    self.class.new *(operands.product(other.operands).map {|a,b| a*b})
+		    self.class.new(*reduce(:+, *(operands.product(other.operands).map {|a,b| a*b})))
 		else
 		    super
 	    end

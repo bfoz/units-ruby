@@ -7,8 +7,8 @@ class Units
 	    return self.dup if other.zero?
 
 	    case other
-		when Units::Addition	then self.class.new(*operands, *other.operands)
-		when Units::Subtraction then self.class.new(self, other)
+		when Units::Addition	then self.class.new(*reduce(:-, *operands, *other.operands))
+		when Units::Subtraction then self.class.new(*operands, other)
 		else self.class.new(*operands, other)
 	    end
 	end

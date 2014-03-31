@@ -13,7 +13,7 @@ describe Units::Subtraction do
     it 'must have a subtraction operator that returns a new proxy' do
 	(subject - 5).must_equal Units::Subtraction.new(3.meters, 4.inches, 5)
 	(5 - subject).must_equal Units::Subtraction.new(5, subject)
-	(subject - subject).must_equal Units::Subtraction.new(subject, subject)
+	(subject - subtraction).must_equal Units::Subtraction.new(3.meters, 4.inches, subtraction)
     end
 
     it 'must have a multiplication operator that returns a new proxy' do
@@ -48,7 +48,7 @@ describe Units::Subtraction do
 	end
 
 	it 'must subtract' do
-	    (subject - addition).must_equal Units::Subtraction.new(3.meters, 4.inches, 3.meters, 5.foot)
+	    (subject - addition).must_equal Units::Subtraction.new(0, 4.inches, 5.foot)
 	end
 
 	it 'must multiply' do
