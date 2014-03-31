@@ -22,6 +22,16 @@ class Units
 	    self.class.new *(operands.map {|operand| -operand })
 	end
 
+	def +(other)
+	    return self.dup if other.zero?
+	    Units.Addition(self, other)
+	end
+
+	def -(other)
+	    return self.dup if other.zero?
+	    Units.Subtraction(self, other)
+	end
+
 	def *(other)
 	    return other if other.zero?
 	    self.class.new *(operands.map {|operand| operand * other })

@@ -7,16 +7,6 @@ class Units
 	    self.class.new -operands.first, *(operands.drop(1))
 	end
 
-	def +(other)
-	    return self.dup if other.zero?
-	    Units::Addition.new(self, other)
-	end
-
-	def -(other)
-	    return self.dup if other.zero?
-	    Units::Subtraction.new(self, other)
-	end
-
 	def *(other)
 	    return other if other.zero?
 

@@ -3,11 +3,6 @@ require_relative 'division'
 
 class Units
     class Subtraction < Operator
-	def +(other)
-	    return self.dup if other.zero?
-	    Units::Addition.new(self, other)
-	end
-
 	def -(other)
 	    return self.dup if other.zero?
 

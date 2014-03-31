@@ -11,11 +11,6 @@ class Units
 	    end
 	end
 
-	def -(other)
-	    return self.dup if other.zero?
-	    Units::Subtraction.new(self, other)
-	end
-
 	def *(other)
 	    return other if other.zero?
 
