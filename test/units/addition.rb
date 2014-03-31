@@ -3,6 +3,7 @@ require 'units/addition'
 
 describe Units::Addition do
     subject { Units::Addition.new(3.meters, 4.inches) }
+    let(:addition) { Units.Addition(3.meters, 9.inches) }
 
     it 'must have an addition operator that returns a new proxy' do
 	(subject + 5).must_equal Units::Addition.new(3.meters, 4.inches, 5)
@@ -13,7 +14,7 @@ describe Units::Addition do
     it 'must have a subtraction operator that returns a new proxy' do
 	(subject - 5).must_equal Units::Subtraction.new(subject, 5)
 	(5 - subject).must_equal Units::Subtraction.new(5, subject)
-	(subject - subject).must_equal Units::Subtraction.new(subject, subject)
+	(subject - addition).must_equal Units::Subtraction.new(subject, addition)
     end
 
     it 'must have a multiplication operator that returns a new proxy' do
@@ -38,6 +39,10 @@ describe Units::Addition do
 
     it 'must return 0 when multiplied by 0' do
 	(subject * 0).must_equal 0
+    end
+
+    it 'must return 0 when subtracting itself' do
+	(subject - subject).must_equal 0
     end
 
     it 'must collapse compatible operands when adding' do

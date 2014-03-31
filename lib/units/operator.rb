@@ -29,6 +29,7 @@ class Units
 
 	def -(other)
 	    return self.dup if other.zero?
+	    return 0 if self == other
 	    Units.Subtraction(self, other)
 	end
 
