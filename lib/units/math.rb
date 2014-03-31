@@ -4,15 +4,18 @@ module Math
     alias :units_sqrt :sqrt
     # Override Math::sqrt to fix handling of {Units::Numeric}s
     # @return [Numeric]
-    def sqrt(a)
-	if a.kind_of?(Units::Numeric)
-	    if a.units
-		Units::Numeric.new(units_sqrt(a.value), a.units.square_root)
+    def sqrt(arg)
+	case arg
+	    when Units::Numeric
+		if arg.units
+		    Units::Numeric.new(units_sqrt(arg.value), arg.units.square_root)
+		else
+		    units_sqrt(arg.value)
+		end
+	    when Units::Operator
+		arg.sqrt
 	    else
-		units_sqrt(a.value)
-	    end
-	else
-	    units_sqrt(a)
+		units_sqrt(arg)
 	end
     end
     # @return [Numeric]

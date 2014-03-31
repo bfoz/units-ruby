@@ -80,6 +80,26 @@ describe Units::Division do
 	end
     end
 
+    describe 'when operating on a SquareRoot operator' do
+	let(:sqrt) { Units::SquareRoot.new(subject) }
+
+	it 'must add' do
+	    (subject + sqrt).must_equal Units.Addition(subject, sqrt)
+	end
+
+	it 'must subtract' do
+	    (subject - sqrt).must_equal Units.Subtraction(subject, sqrt)
+	end
+
+	it 'must multiply' do
+	    (subject * sqrt).must_equal Units.Division(3.meters * sqrt, 4.inches)
+	end
+
+	it 'must divide' do
+	    (subject / sqrt).must_equal Units.Division(3.meters, 4.inches, sqrt)
+	end
+    end
+
     it 'must convert all operands to a desired unit' do
 	subject.to_foot.must_be_close_to (3.meters.foot / 4.inches.foot)
     end

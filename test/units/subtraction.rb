@@ -80,6 +80,26 @@ describe Units::Subtraction do
 	end
     end
 
+    describe 'when operating on a SquareRoot operator' do
+	let(:sqrt) { Units::SquareRoot.new(subject) }
+
+	it 'must add' do
+	    (subject + sqrt).must_equal Units.Addition(subject, sqrt)
+	end
+
+	it 'must subtract' do
+	    (subject - sqrt).must_equal Units.Subtraction(3.meters, 4.inches, sqrt)
+	end
+
+	it 'must multiply' do
+	    (subject * sqrt).must_equal Units.Subtraction(3.meters * sqrt, 4.inches * sqrt)
+	end
+
+	it 'must divide' do
+	    (subject / sqrt).must_equal Units.Subtraction(3.meters / sqrt, 4.inches / sqrt)
+	end
+    end
+
     it 'must convert all operands to a desired unit' do
 	subject.to_foot.must_be_close_to 9.509.foot
     end
@@ -95,6 +115,10 @@ describe Units::Subtraction do
 
 	it 'must have an abs2 method' do
 	    subject.abs2.must_equal (subject * subject)
+	end
+
+	it 'must have a sqrt method' do
+	    subject.sqrt.must_equal Units::SquareRoot.new(subject)
 	end
 
 	it 'must have a zero? method' do

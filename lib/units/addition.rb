@@ -1,4 +1,5 @@
 require_relative 'operator'
+require_relative 'square_root'
 
 class Units
     class Addition < Operator
@@ -43,5 +44,15 @@ class Units
 	def to_s
 	    super ' + '
 	end
+
+	# @group Math
+	def sqrt
+	    Units::SquareRoot.new(self)
+	end
+	# @endgroup
+    end
+
+    def self.Addition(*args)
+	Units::Addition.new(*args)
     end
 end

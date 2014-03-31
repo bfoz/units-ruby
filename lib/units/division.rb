@@ -44,4 +44,8 @@ class Units
 	end
 	# @endgroup
     end
+
+    def self.Division(*args)
+	Units::Division.new(*args)
+    end
 end

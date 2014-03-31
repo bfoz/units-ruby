@@ -99,8 +99,7 @@ class Units
 
 	    case other
 		when Units::Addition	then Units::Addition.new(self, *other.operands)
-		when Units::Subtraction	then Units::Addition.new(self, other)
-		when Units::Division	then Units::Addition.new(self, other)
+		when Units::Operator	then Units.Addition(self, other)
 		else op(:+, other)
 	    end
 	end

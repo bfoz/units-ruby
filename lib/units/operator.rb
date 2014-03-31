@@ -63,6 +63,12 @@ class Units
 	    operands.map {|op| op.is_a?(self.class) ? ('(' + op.to_s + ')') : op}.join(operator)
 	end
 
+	# @group Math
+	def sqrt
+	    self.class.new *(operands.map {|op| op.respond_to?(:sqrt) ? op.sqrt : Math.sqrt(op)})
+	end
+	# @endgroup
+
 	# @group Numeric
 	def abs2
 	    self * self

@@ -32,5 +32,15 @@ class Units
 	def to_s
 	    super ' - '
 	end
+
+	# @group Math
+	def sqrt
+	    Units::SquareRoot.new(self)
+	end
+	# @endgroup
+    end
+
+    def self.Subtraction(*args)
+	Units::Subtraction.new(*args)
     end
 end
