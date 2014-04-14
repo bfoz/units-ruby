@@ -45,18 +45,30 @@ module UnitsMixin
     end
 
     def add(other)
-	result = self.unitsmethods_original_addition(value_for_other(other))
-	apply_result_units(result, units_op(:+, units_for_other(other)))
+	if other.is_a? Units::Operator
+	    other + self
+	else
+	    result = self.unitsmethods_original_addition(value_for_other(other))
+	    apply_result_units(result, units_op(:+, units_for_other(other)))
+	end
     end
 
     def subtract(other)
-	result = self.unitsmethods_original_subtraction(value_for_other(other))
-	apply_result_units(result, units_op(:-, units_for_other(other)))
+	if other.is_a? Units::Operator
+	    Units.Subtraction(self, other)
+	else
+	    result = self.unitsmethods_original_subtraction(value_for_other(other))
+	    apply_result_units(result, units_op(:-, units_for_other(other)))
+	end
     end
 
     def multiply(other)
-	result = unitsmethods_original_multiply(value_for_other(other))
-	apply_result_units(result, units_op(:*, units_for_other(other)))
+	if other.is_a? Units::Operator
+	    other * self
+	else
+	    result = unitsmethods_original_multiply(value_for_other(other))
+	    apply_result_units(result, units_op(:*, units_for_other(other)))
+	end
     end
 
     def divide(other)

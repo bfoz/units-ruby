@@ -70,7 +70,7 @@ class Units
 	# that attempt to avoid dividing by zero
 	def eql?(other)
 	    if other.respond_to?(:units)
-		(@units == other.units) and (@value == other.value)
+		(@units == other.units) and (@value == (other.respond_to?(:value) ? other.value : other))
 	    elsif other == 0
 		@value == other
 	    else
