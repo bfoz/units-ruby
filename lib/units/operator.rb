@@ -10,6 +10,7 @@ class Units
 	end
 
 	def eql?(other)
+	    return zero? if (other == 0)
 	    other.is_a?(self.class) && (operands == other.operands)
 	end
 	alias :== :eql?
