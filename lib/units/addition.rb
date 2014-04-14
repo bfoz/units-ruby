@@ -4,15 +4,21 @@ require_relative 'square_root'
 class Units
     class Addition < Operator
 	def +(other)
-	    return self.dup if other.zero?
-
-	    case other
-		when self.class
-		    self.class.new(*reduce(:+, *operands, *other.operands))
-		when Numeric
-		    self.class.new(*reduce(:+, *operands, other))
+	    if other.zero?
+		if 1 == operands.size
+		    operands.first
 		else
-		    self.class.new(*operands, other)
+		    self.dup
+		end
+	    else
+		case other
+		    when self.class
+			self.class.new(*reduce(:+, *operands, *other.operands))
+		    when Numeric
+			self.class.new(*reduce(:+, *operands, other))
+		    else
+			self.class.new(*operands, other)
+		end
 	    end
 	end
 

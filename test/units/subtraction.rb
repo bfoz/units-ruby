@@ -29,20 +29,25 @@ describe Units::Subtraction do
 	(subject / subject).must_equal Units::Division.new(subject, subject)
     end
 
-    it 'must not add zero' do
-	(subject + 0).must_equal subject
-    end
+    describe 'when operating on zero' do
+	it 'must not add zero' do
+	    (subject + 0).must_equal subject
+	    (Units.Subtraction(3.meters) + 0).must_equal 3.meters
+	    (Units.Subtraction(3.meters) + 0).wont_be_kind_of Units::Operator
+	end
 
-    it 'must not subtract 0' do
-	(subject - 0).must_equal subject
-    end
+	it 'must not subtract 0' do
+	    (subject - 0).must_equal subject
+	    (Units.Subtraction(3.meters) - 0).must_equal 3.meters
+	end
 
-    it 'must return 0 when multiplied by 0' do
-	(subject * 0).must_equal 0
-    end
+	it 'must return 0 when multiplied by 0' do
+	    (subject * 0).must_equal 0
+	end
 
-    it 'must return 0 when subtracting itself' do
-	(subject - subject).must_equal 0
+	it 'must return 0 when subtracting itself' do
+	    (subject - subject).must_equal 0
+	end
     end
 
     describe 'when operating on an Addition operator' do

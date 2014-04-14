@@ -100,6 +100,7 @@ class Units
 	# @group Arithmetic
 	def +(other)
 	    return other if self.zero?
+	    return self if other.zero?
 
 	    case other
 		when Units::Addition	then Units::Addition.new(self, *other.operands)
@@ -109,6 +110,8 @@ class Units
 	end
 
 	def -(other)
+	    return self if other.zero?
+
 	    case other
 		when Units::Addition	then units ? (Units.Subtraction(self) - other) : Units.Subtraction(self, other)
 		when Units::Operator	then Units::Subtraction.new(self, other)
@@ -117,6 +120,9 @@ class Units
 	end
 
 	def *(other)
+	    return self if self.zero?
+	    return other if (other.respond_to?(:zero?) ? other.zero? : (other == 0))
+
 	    case other
 		when Units::Operator	then other * self
 		else op(:*, other)

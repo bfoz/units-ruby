@@ -4,13 +4,20 @@ require_relative 'division'
 class Units
     class Subtraction < Operator
 	def -(other)
-	    return self.dup if other.zero?
-	    return 0 if self == other
-
-	    case other
-		when Units::Addition	then self.class.new(*reduce(:-, *operands, *other.operands))
-		when Units::Subtraction then self.class.new(*operands, other)
-		else self.class.new(*operands, other)
+	    if other.zero?
+		if 1 == operands.size
+		    operands.first
+		else
+		    self.dup
+		end
+	    elsif self == other
+		0
+	    else
+		case other
+		    when Units::Addition    then self.class.new(*reduce(:-, *operands, *other.operands))
+		    when Units::Subtraction then self.class.new(*operands, other)
+		    else self.class.new(*operands, other)
+		end
 	    end
 	end
 

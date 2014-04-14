@@ -29,24 +29,29 @@ describe Units::Addition do
 	(subject / subject).must_equal Units::Division.new(subject, subject)
     end
 
-    it 'must not add zero' do
-	(subject + 0).must_equal subject
-    end
-
-    it 'must not subtract 0' do
-	(subject - 0).must_equal subject
-    end
-
-    it 'must return 0 when multiplied by 0' do
-	(subject * 0).must_equal 0
-    end
-
-    it 'must return 0 when subtracting itself' do
-	(subject - subject).must_equal 0
-    end
-
     it 'must collapse compatible operands when adding' do
 	(subject + 5.inches).must_equal Units.Addition(3.meters, 9.inches)
+    end
+
+    describe 'when operating on zero' do
+	it 'must not add zero' do
+	    (subject + 0).must_equal subject
+	    (Units.Addition(3.meters) + 0).must_equal 3.meters
+	    (Units.Addition(3.meters) + 0).wont_be_kind_of Units::Operator
+	end
+
+	it 'must not subtract 0' do
+	    (subject - 0).must_equal subject
+	    (Units.Addition(3.meters) - 0).must_equal 3.meters
+	end
+
+	it 'must return 0 when multiplied by 0' do
+	    (subject * 0).must_equal 0
+	end
+
+	it 'must return 0 when subtracting itself' do
+	    (subject - subject).must_equal 0
+	end
     end
 
     describe 'when operating on a Division operator' do

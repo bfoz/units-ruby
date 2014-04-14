@@ -24,14 +24,29 @@ class Units
 	end
 
 	def +(other)
-	    return self.dup if other.zero?
-	    Units.Addition(self, other)
+	    if other.zero?
+		if 1 == operands.size
+		    operands.first
+		else
+		    self.dup
+		end
+	    else
+		Units.Addition(self, other)
+	    end
 	end
 
 	def -(other)
-	    return self.dup if other.zero?
-	    return 0 if self == other
-	    Units.Subtraction(self, other)
+	    if other.zero?
+		if 1 == operands.size
+		    operands.first
+		else
+		    self.dup
+		end
+	    elsif self == other
+		0
+	    else
+		Units.Subtraction(self, other)
+	    end
 	end
 
 	def *(other)
