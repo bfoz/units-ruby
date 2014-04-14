@@ -17,9 +17,13 @@ class Units
 	    # Check this before valid_conversion? because valid_conversion? has low standards
 	    if (id.to_s =~ /(.+)\?$/) and Units.valid_unit?($1)
 		@units.is_a?($1)
-	    elsif @units.valid_conversion?(id)
+	    elsif (@units and @units.valid_conversion?(id)) or Units.valid_unit?(id)
 		units = Units.new(id)
-		(@units == units) ? self : self.class.new(@units.convert(@value, id), units)
+		if @units
+		    (@units == units) ? self : self.class.new(@units.convert(@value, id), units)
+		else
+		    self.class.new(value, units)
+		end
 	    elsif (id.to_s =~ /^to_(.+)$/) and Units.valid_unit?($1)
 		units = Units.new($1)
 		return self if @units == units
