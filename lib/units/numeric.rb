@@ -24,6 +24,9 @@ class Units
 		else
 		    self.class.new(value, units)
 		end
+	    elsif (id.to_s =~ /^per_(.+)$/) and Units.valid_unit?($1)
+		units = @units ? @units.per({$1 => (args[0] || 1)}) : Units.new({$1 => -(args[0] || 1)})
+		self.class.new(@value, units)
 	    elsif (id.to_s =~ /^to_(.+)$/) and Units.valid_unit?($1)
 		units = Units.new($1)
 		return self if @units == units

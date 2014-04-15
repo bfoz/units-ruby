@@ -29,7 +29,12 @@ You can also make fancier units by passing arguments...
 
 ```ruby
     square_meters = 3.meters(2)
-    speed = 3.meters.second(-1)
+
+    speed   = 3.meters.second(-1)
+    gravity = 9.81.meters.per_second(2)
+
+    future  = 88.miles.per_hour	    # No need for roads
+    hertz   = 440.per_second	    # A lovely A4 note
 ```
 
 ### Converting units

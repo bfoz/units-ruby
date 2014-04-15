@@ -180,6 +180,21 @@ describe Units do
 	(Units.new('meters')*Units.new('meters')).square_root.must_equal Units.new('meters')
     end
 
+    describe 'when converting to other units with the per_ prefix' do
+	it 'must add the correct units to existing units' do
+	    Units.new('meters').per(:second).must_equal Units.new({meter:1, second:-1})
+	    Units.new('meters').per(second:2).must_equal Units.new({meter:1, second:-2})
+
+	    Units.new('meters').per('second').must_equal Units.new({meter:1, second:-1})
+	    Units.new('meters').per('second' => 2).must_equal Units.new({meter:1, second:-2})
+	end
+
+	it 'must cancel units when appropriate' do
+	    Units.new(second:2).per(:second).must_equal Units.new(:second)
+	    Units.new('second').per(:second).must_equal nil
+	end
+    end
+
     describe 'when checking conversion validity' do
 	it 'must accept inches and meters' do
 	    Units.meter.valid_conversion?('inch').must_equal true

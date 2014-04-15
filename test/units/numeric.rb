@@ -273,6 +273,22 @@ describe Units::Numeric do
 	end
     end
 
+    describe 'when converting to other units with the per_ prefix' do
+	it 'must add the correct units to a literal' do
+	    3.per_second.must_equal 3.second(-1)
+	    4.per_second(2).must_equal 4.second(-2)
+	end
+
+	it 'must add the correct units to existing units' do
+	    three_meters.per_second.must_equal Units::Numeric.new(3, {meters:1, second:-1})
+	    three_meters.per_second(2).must_equal Units::Numeric.new(3, {meters:1, second:-2})
+	end
+
+	it 'must cancel units when appropriate' do
+	    three_meters.per_meter.must_equal Units::Numeric.new(3)
+	end
+    end
+
     describe 'when converting to other units without the to_ prefix' do
 	it 'must convert to different units' do
 	    one_meter.inches.must_equal 39.3701.inches

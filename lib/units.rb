@@ -135,6 +135,25 @@ class Units
 	value * prefix_multiplier * base_multiplier
     end
 
+    # Add a unit with a negative exponent to the current units
+    def per(*args)
+	# Convert Strings to Symbols and Symbols to Hashes
+	args.map! {|a| a.is_a?(String) ? a.to_sym : a }
+	args.map! {|a| a.is_a?(Symbol) ? {a => 1} : a }
+
+	# Merge all hashes into one
+	args = args.reduce({}) { |h, a| h.merge(a) {|k,o,n| o+n} }
+
+	# Negate all of the exponents
+	args = args.reduce({}) {|memo, (k, v)| memo[k.to_sym] = -v; memo}
+
+	begin
+	    self.class.new(@units, args)
+	rescue ArgumentError
+	    nil
+	end
+    end
+
     # Check that the given conversion is valid
     # @param [String,Symbol]	target	The units to check
     # @return [Bool]	True if the target units are a valid conversion
