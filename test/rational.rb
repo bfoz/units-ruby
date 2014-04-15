@@ -82,8 +82,8 @@ describe Rational do
 	let(:subtraction)   { Units::Subtraction.new(2.inch, 3.foot) }
 
 	it 'must add an Addition proxy' do
-	    (one_meter + addition).must_equal Units::Addition.new(2.inch, 3.foot, one_meter)
-	    (zero_meters + addition).must_equal (addition + zero_meters)
+	    (one_meter + addition).must_equal Units::Addition.new(one_meter, 2.inch, 3.foot)
+	    (zero_meters + addition).must_equal (zero_meters + addition)
 	end
 
 	it 'must subtract an Addition proxy' do
@@ -92,8 +92,8 @@ describe Rational do
 	end
 
 	it 'must add a Subtraction proxy' do
-	    (one_meter + subtraction).must_equal Units::Addition.new(subtraction, one_meter)
-	    (zero_meters + subtraction).must_equal (subtraction + zero_meters)
+	    (one_meter + subtraction).must_equal Units::Addition.new(one_meter, subtraction)
+	    (zero_meters + subtraction).must_equal (zero_meters + subtraction)
 	end
 
 	it 'must subtract a Subtraction proxy' do

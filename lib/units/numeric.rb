@@ -103,8 +103,8 @@ class Units
 	    return self if other.zero?
 
 	    case other
-		when Units::Addition	then Units::Addition.new(self, *other.operands)
-		when Units::Operator	then Units.Addition(self, other)
+		when Units::Addition	then Units.Addition(self) + other
+		when Units::Operator	then Units.Addition(self) + other
 		else op(:+, other)
 	    end
 	end
@@ -113,8 +113,8 @@ class Units
 	    return self if other.zero?
 
 	    case other
-		when Units::Addition	then units ? (Units.Subtraction(self) - other) : Units.Subtraction(self, other)
-		when Units::Operator	then Units::Subtraction.new(self, other)
+		when Units::Addition	then Units.Subtraction(self) - other
+		when Units::Operator	then Units.Subtraction(self) - other
 		else op(:-, other)
 	    end
 	end

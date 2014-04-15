@@ -46,7 +46,7 @@ module UnitsMixin
 
     def add(other)
 	if other.is_a? Units::Operator
-	    other + self
+	    Units.Addition(self) + other
 	else
 	    result = self.unitsmethods_original_addition(value_for_other(other))
 	    apply_result_units(result, units_op(:+, units_for_other(other)))

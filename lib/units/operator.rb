@@ -114,11 +114,16 @@ class Units
 		skip = false
 		memo.map! do |lhs|
 		    next lhs if skip
-		    result = lhs.send(operator, operand)
-		    if result.is_a?(Numeric)
-			skip = true
-			result
-		    else
+		    next lhs if [lhs, operand].map {|a| a.respond_to?(:units) && !!a.units }.uniq.size != 1
+		    begin
+			result = lhs.send(operator, operand)
+			if result.is_a?(Numeric)
+			    skip = true
+			    result
+			else
+			    lhs
+			end
+		    rescue
 			lhs
 		    end
 		end
