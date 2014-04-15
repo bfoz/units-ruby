@@ -38,6 +38,13 @@ You can also make fancier units by passing arguments...
     10.inches.mm             # => 254.0 millimeter
 ```
 
+### Checking for units
+```ruby
+    three_meters = 3.meters
+    three_meters.meters?     # => true
+    three_meters.inches?     # => false
+```
+
 Supported Units
 ----------------
 All of the SI units listed below allow any of the standard
