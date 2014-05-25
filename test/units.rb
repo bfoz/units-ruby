@@ -180,6 +180,10 @@ describe Units do
 	(Units.new('meters')*Units.new('meters')).square_root.must_equal Units.new('meters')
     end
 
+    it 'must square root a non-square' do
+	Units.new('meter').square_root.must_equal Units.new(meters:'1/2'.to_r)
+    end
+
     describe 'when converting to other units with the per_ prefix' do
 	it 'must add the correct units to existing units' do
 	    Units.new('meters').per(:second).must_equal Units.new({meter:1, second:-1})

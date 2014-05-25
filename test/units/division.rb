@@ -29,6 +29,12 @@ describe Units::Division do
 	(subject / subject).must_equal Units::Division.new(subject, subject)
     end
 
+    it 'must spaceship with a Numeric that has units' do
+	(Units::Division.new(20.inches, 15.meters) <=> 1000.inches).must_equal -1
+	(Units::Division.new(15.meters, 15.meters) <=> 1.meter).must_equal 0
+	(Units::Division.new(15.meters, 20.inches) <=> 5.inches).must_equal 1
+    end
+
     it 'must not add zero' do
 	(subject + 0).must_equal subject
     end

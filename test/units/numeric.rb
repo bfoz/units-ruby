@@ -271,6 +271,12 @@ describe Units::Numeric do
 	it "must reject invalid target units" do
 	    -> { 100.cm.to_foo }.must_raise NoMethodError
 	end
+
+	it 'must have a conversion method' do
+	    100.cm.to('inches').must_equal 39.3701.inches
+	    100.cm.to(:inches).must_equal 39.3701.inches
+	    100.cm.convert_to(:inches).must_equal 39.3701.inches
+	end
     end
 
     describe 'when converting to other units with the per_ prefix' do

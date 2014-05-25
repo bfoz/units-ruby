@@ -10,6 +10,15 @@ class Units
 	    super arg
 	end
 
+	def <=>(other)
+	    case other
+		when Units::Numeric
+		    convert_to(other.units**2) <=> other
+		else
+		    raise ArgumentError, "Can't spaceship with '#{other}'"
+	    end
+	end
+
 	def -@
 	    Units.Subtraction(0, self)
 	end
@@ -31,6 +40,14 @@ class Units
 		super
 	    end
 	end
+
+	# Convert all of the operands to the given units and perform the proxied operation
+	# @param units [Unit]	the desired {Unit}s to convert to
+	# @return [Number]  the result of the proxied operation
+	def convert_to(units)
+	    Math::sqrt(operands.first.convert_to(units))
+	end
+	alias to convert_to
 
 	def to_s
 	    'sqrt(' + operands.first.to_s + ')'

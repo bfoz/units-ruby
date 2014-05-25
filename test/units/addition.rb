@@ -33,6 +33,12 @@ describe Units::Addition do
 	(subject + 5.inches).must_equal Units.Addition(3.meters, 9.inches)
     end
 
+    it 'must spaceship with a Numeric that has units' do
+	(Units::Addition.new(20.inches, 15.meters) <=> 1000.inches).must_equal -1
+	(Units::Addition.new(15.meters, 15.meters) <=> 30.meters).must_equal 0
+	(Units::Addition.new(15.meters, 20.inches) <=> 5.inches).must_equal 1
+    end
+
     describe 'when operating on zero' do
 	it 'must not add zero' do
 	    (subject + 0).must_equal subject

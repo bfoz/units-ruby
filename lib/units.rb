@@ -218,6 +218,6 @@ class Units
     # Return the units for the square root of the receiver
     # @return [Units]
     def square_root
-	self.class.new(@units.inject({}) {|h,(k,v)| h[k] = v/2; h })
+	self.class.new(@units.inject({}) {|h,(k,v)| v = v.to_r if v.is_a?(Integer); h[k] = v/2; h })
     end
 end

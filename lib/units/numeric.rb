@@ -146,6 +146,20 @@ class Units
 	end
 	# @endgroup
 
+	# @group Conversion
+
+	# Convert to the desired units
+	# @param units [Units]	the desired units to convert to
+	# @return [Numeric]
+	def convert_to(units)
+	    raise UnitsError, "Can't convert '#{@units}' to: #{units}" unless @units.valid_conversion?(units)
+	    return self if @units == units
+	    self.class.new(@units.convert(@value, units), units)
+	end
+	alias to convert_to
+
+	# @endgroup
+
 	private
 
 	# Generic operator handler

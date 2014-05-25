@@ -15,6 +15,15 @@ class Units
 	end
 	alias :== :eql?
 
+	def <=>(other)
+	    case other
+		when Units::Numeric
+		    convert_to(other.units) <=> other
+		else
+		    raise ArgumentError, "Can't spaceship '#{self}' with '#{other}'"
+	    end
+	end
+
 	def +@
 	    self
 	end
@@ -75,6 +84,14 @@ class Units
 		super
 	    end
 	end
+
+	# Convert all of the operands to the given units and perform the proxied operation
+	# @param units [Unit]	the desired {Unit}s to convert to
+	# @return [Number]  the result of the proxied operation
+	def convert_to(units)
+	    operands.map {|operand| operand.respond_to?(:to) ? operand.to(units) : operand }.reduce(operator)
+	end
+	alias :to :convert_to
 
 	# This is meant to be called from subclasses, but won't explode if called directly
 	def to_s(operator=' ')

@@ -34,6 +34,12 @@ describe Units::SquareRoot do
 	(Units::SquareRoot.new(Units.Addition(15.meters, 20.inches)) / 5).must_equal Units.SquareRoot(addition / 5.abs2)
     end
 
+    it 'must spaceship with a Numeric that has units' do
+	(Units::SquareRoot.new(addition) <=> 1000.inches('1/2'.to_r)).must_equal -1
+	(Units::SquareRoot.new(addition) <=> Math.sqrt(3.1016).meter).must_equal 0
+	(Units::SquareRoot.new(addition) <=> 5.inches).must_equal 1
+    end
+
     describe 'when pretending to be a Numeric' do
 	it 'must have an unary plus method' do
 	    (+subject).must_equal subject
