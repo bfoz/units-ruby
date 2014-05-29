@@ -277,6 +277,10 @@ describe Units::Numeric do
 	    100.cm.to(:inches).must_equal 39.3701.inches
 	    100.cm.convert_to(:inches).must_equal 39.3701.inches
 	end
+
+	it 'must have a conversion methods that accepts a Units argument' do
+	    100.cm.to(Units.new(:inches)).must_equal 39.3701.inches
+	end
     end
 
     describe 'when converting to other units with the per_ prefix' do

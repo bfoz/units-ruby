@@ -155,6 +155,10 @@ describe Units do
     end
 
     describe "conversion" do
+	it 'must have a conversion method that accepts a Units parameter' do
+	    Units.meter.convert(10, Units.inch).must_equal 393.701
+	end
+
 	it "should have an inspect method" do
 	    Units.new('meters').inspect.must_equal 'meter'
 	end
@@ -214,6 +218,10 @@ describe Units do
 
 	it 'must accept mixed prefixes' do
 	    Units.inch.valid_conversion?(:mm).must_equal true
+	end
+
+	it 'must accept a Units parameter' do
+	    Units.inch.valid_conversion?(Units.meter).must_equal true
 	end
 
 	it 'must reject nonsense conversions' do

@@ -152,6 +152,7 @@ class Units
 	# @param units [Units]	the desired units to convert to
 	# @return [Numeric]
 	def convert_to(units)
+	    units = units.is_a?(Units) ? units : Units.new(units)
 	    raise UnitsError, "Can't convert '#{@units}' to: #{units}" unless @units.valid_conversion?(units)
 	    return self if @units == units
 	    self.class.new(@units.convert(@value, units), units)
