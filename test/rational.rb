@@ -4,6 +4,12 @@ require 'units/numeric'
 describe Rational do
     subject { Rational(10,2).meters }
 
+    let(:three)	{ Units::Numeric.new(3) }
+    let(:four)	{ Units::Numeric.new(4) }
+
+    let(:three_inches)	{ Units::Numeric.new(3, :inches) }
+    let(:four_inches)	{ Units::Numeric.new(4, :inches) }
+
     let(:zero_meters)	{ Rational(0).meters }
     let(:one_meter)	{ Rational(1).meter }
     let(:three_meters)	{ Rational(3).meter }
@@ -74,6 +80,28 @@ describe Rational do
 
 	it 'must support exponentiation' do
 	    (Rational(3,1).meters**2).must_equal Rational(9,1).meters(2)
+	end
+    end
+
+    describe 'arithmetic with mixed units' do
+	it 'should allow addition of valid units and no units' do
+	    skip
+	    (three_meters + four).must_equal seven_meters
+	    (four + three_meters).must_equal seven_meters
+	end
+
+	it 'should allow subtraction of valid units and no units' do
+	    skip
+	    (three_meters - three).must_equal 0.meters
+	    (three - three_meters).must_equal 0.meters
+	end
+
+	it 'must return a proxy object when adding mixed units' do
+	    (three_meters + three_inches).must_equal Units::Addition.new(three_meters, three_inches)
+	end
+
+	it 'must return a proxy object when subtracting mixed units' do
+	    (three_meters - four_inches).must_equal Units::Subtraction.new(three_meters, four_inches)
 	end
     end
 

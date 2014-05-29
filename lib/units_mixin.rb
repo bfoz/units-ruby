@@ -48,8 +48,12 @@ module UnitsMixin
 	if other.is_a? Units::Operator
 	    Units.Addition(self) + other
 	else
-	    result = self.unitsmethods_original_addition(value_for_other(other))
-	    apply_result_units(result, units_op(:+, units_for_other(other)))
+	    begin
+		result = self.unitsmethods_original_addition(value_for_other(other))
+		apply_result_units(result, units_op(:+, units_for_other(other)))
+	    rescue UnitsError
+		Units.Addition(self, other)
+	    end
 	end
     end
 
@@ -57,8 +61,12 @@ module UnitsMixin
 	if other.is_a? Units::Operator
 	    Units.Subtraction(self, other)
 	else
-	    result = self.unitsmethods_original_subtraction(value_for_other(other))
-	    apply_result_units(result, units_op(:-, units_for_other(other)))
+	    begin
+		result = self.unitsmethods_original_subtraction(value_for_other(other))
+		apply_result_units(result, units_op(:-, units_for_other(other)))
+	    rescue UnitsError
+		Units.Subtraction(self, other)
+	    end
 	end
     end
 
