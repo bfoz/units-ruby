@@ -94,8 +94,13 @@ class Units
 	alias :to :convert_to
 
 	# This is meant to be called from subclasses, but won't explode if called directly
-	def to_s(operator=' ')
+	def to_s(operator)
 	    operands.map {|op| op.is_a?(Units::Operator) ? ('(' + op.to_s + ')') : op}.join(operator)
+	end
+
+	# This is meant to be called from subclasses, but won't explode if called directly
+	def inspect(operator)
+	    operands.map {|op| op.is_a?(Units::Operator) ? ('(' + op.inspect + ')') : op.inspect}.join(operator)
 	end
 
 	# @group Math

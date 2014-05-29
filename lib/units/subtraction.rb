@@ -41,6 +41,10 @@ class Units
 	    super ' - '
 	end
 
+	def inspect
+	    super ' - '
+	end
+
 	# @group Math
 	def sqrt
 	    Units::SquareRoot.new(self)

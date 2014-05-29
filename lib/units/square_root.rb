@@ -53,6 +53,10 @@ class Units
 	    'sqrt(' + operands.first.to_s + ')'
 	end
 
+	def inspect
+	    'sqrt(' + operands.first.inspect + ')'
+	end
+
 	# @group Numeric
 	def abs2
 	    operands.first

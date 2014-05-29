@@ -38,6 +38,10 @@ class Units
 	    super ' / '
 	end
 
+	def inspect
+	    super ' / '
+	end
+
 	# @group Numeric
 	def zero?
 	    operands.any? {|operand| operand.zero? }
