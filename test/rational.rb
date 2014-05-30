@@ -137,4 +137,10 @@ describe Rational do
 	    (four_meters / Units::Addition.new(1.inch, 2.foot)).must_equal Units::Division.new(four_meters, Units::Addition.new(1.inch, 2.foot))
 	end
     end
+
+    describe 'when converting to other units' do
+	it 'must have a conversion method' do
+	    four_meters.to('inches').must_be_close_to 157.48.inches
+	end
+    end
 end

@@ -104,6 +104,21 @@ module UnitsMixin
 	apply_result_units(result, units ? (units ** power) : nil)
     end
 
+    # @group Conversion
+
+    # Convert to the desired units
+    # @param units [Units]	the desired units to convert to
+    # @return [Numeric]
+    def convert_to(units)
+	units = units.is_a?(Units) ? units : Units.new(units)
+	raise UnitsError, "Can't convert '#{@units}' to: #{units}" unless @units.valid_conversion?(units)
+	return self if @units == units
+	@units.convert(self, units).tap {|value| value.instance_variable_set(:@units, units)}
+    end
+    alias to convert_to
+
+    # @endgroup
+
     private
 
     def apply_result_units(result, result_units)
