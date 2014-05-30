@@ -17,10 +17,24 @@ class Units
 
 	def <=>(other)
 	    case other
+		when ::Numeric
+		    convert_to(operands.first.units) <=> other
 		when Units::Numeric
 		    convert_to(other.units) <=> other
+		when Units::Operator
+		    if eql?(other)
+			0
+		    else
+			# If the operands aren't exactly equal, try converting
+			# them both to some unit and then do the comparison
+
+			# Randomly choose the first unit of self
+			target_unit = operands.first.units
+
+			self.to(target_unit) <=> other.to(target_unit)
+		    end
 		else
-		    raise ArgumentError, "Can't spaceship '#{self}' with '#{other}'"
+		    raise ArgumentError, "Can't spaceship '#{self}'(#{self.class}) with '#{other}'(#{other.class})"
 	    end
 	end
 
@@ -89,7 +103,7 @@ class Units
 	# @param units [Unit]	the desired {Unit}s to convert to
 	# @return [Number]  the result of the proxied operation
 	def convert_to(units)
-	    operands.map {|operand| operand.respond_to?(:to) ? operand.to(units) : operand }.reduce(operator)
+	    operands.map {|operand| operand.to(units) rescue operand }.reduce(operator)
 	end
 	alias :to :convert_to
 
