@@ -1,5 +1,7 @@
 class Units
     class Operator
+	include Comparable
+
 	# @!attribute operands
 	#   @return [Array]  The operands of the operator
 	attr_reader :operands
