@@ -5,6 +5,11 @@ describe Units::Addition do
     subject { Units::Addition.new(3.meters, 4.inches) }
     let(:addition) { Units.Addition(3.meters, 9.inches) }
 
+    it 'must have a units attribute' do
+	subject.units.must_equal Units.meters
+	Units::Addition.new(Units::Subtraction.new(5.inches, 3.meters), 4.inches).units.must_equal Units.inches
+    end
+
     it 'must have an addition operator that returns a new proxy' do
 	(subject + 5).must_equal Units::Addition.new(3.meters, 4.inches, 5)
 	(5 + subject).must_equal Units::Addition.new(5, 3.meters, 4.inches)

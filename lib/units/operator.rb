@@ -20,7 +20,7 @@ class Units
 	def <=>(other)
 	    case other
 		when ::Numeric
-		    convert_to(operands.first.units) <=> other
+		    convert_to(units) <=> other
 		when Units::Numeric
 		    convert_to(other.units) <=> other
 		when Units::Operator
@@ -31,7 +31,7 @@ class Units
 			# them both to some unit and then do the comparison
 
 			# Randomly choose the first unit of self
-			target_unit = operands.first.units
+			target_unit = units
 
 			self.to(target_unit) <=> other.to(target_unit)
 		    end
@@ -108,6 +108,12 @@ class Units
 	    operands.map {|operand| operand.to(units) rescue operand }.reduce(operator)
 	end
 	alias :to :convert_to
+
+	# @!attribute units
+	#   @return [Unit]  a {Unit} randomly-selected from the operands
+	def units
+	    operands.first.units    # Randomly choose the first available unit
+	end
 
 	# This is meant to be called from subclasses, but won't explode if called directly
 	def to_s(operator)
