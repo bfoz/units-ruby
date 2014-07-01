@@ -212,8 +212,9 @@ describe Units::Numeric do
 		(four_meters <=> three_meters).must_equal 1
 	    end
 
-	    it "must not spaceship with unlike units" do
-		(three_meters <=> three_inches).must_be_nil
+	    it "must spaceship with unlike units" do
+		(three_meters <=> three_inches).must_equal 1
+		(three_inches <=> three_meters).must_equal -1
 	    end
 
 	    it "must spaceship with unitless literals" do

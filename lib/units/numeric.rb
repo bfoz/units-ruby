@@ -89,7 +89,12 @@ class Units
 	def <=>(other)
 	    if other.kind_of? Numeric
 		if @units
-		    @units.eql?(other.units) ? (@value <=> other.value) : nil
+		    if @units.eql?(other.units)
+			@value <=> other.value
+		    else
+			# Try converting to a common unit
+			self <=> other.to(@units)
+		    end
 		else
 		    (@value <=> other.value)
 		end
