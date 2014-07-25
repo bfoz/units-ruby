@@ -168,6 +168,11 @@ describe Units::Numeric do
 	    v[0].must_equal three_meters
 	    v[1].must_equal six_meters
 	end
+
+	it 'must ignore zero' do
+	    (5.cm + 0.mm).must_equal 5.cm
+	    (5.cm + 0.mm).must_be_instance_of Units::Numeric
+	end
     end
 
     describe 'arithmetic with proxy objects' do
@@ -181,7 +186,7 @@ describe Units::Numeric do
 
 	it 'must subtract an Addition proxy' do
 	    (1.meter - addition).must_equal Units.Subtraction(1.meter, 2.inch, 3.foot)
-	    (0.meter - addition).must_equal Units::Subtraction.new(0.meter, 2.inch, 3.foot)
+	    (0.meter - addition).must_equal Units::Subtraction.new(-2.inch, 3.foot)
 	end
 
 	it 'must add a Subtraction proxy' do
@@ -190,7 +195,7 @@ describe Units::Numeric do
 	end
 
 	it 'must subtract a Subtraction proxy' do
-	    (1.meter - Units::Subtraction.new(2.inch, 3.foot)).must_equal Units::Subtraction.new(1.meter, Units::Subtraction.new(2.inch, 3.foot))
+	    (1.meter - Units::Subtraction.new(2.inch, 3.foot)).must_equal Units::Subtraction.new(1.meter, 2.inch, -3.foot)
 	end
 
 	it 'must multiply by a proxy object' do

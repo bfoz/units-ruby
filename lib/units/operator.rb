@@ -153,12 +153,14 @@ class Units
 
 	# Reduce the length of the operand list by applying the operator to any operand pairs that won't produce more proxy objects
 	# @param operator [Symbol]  The operator to apply to the operands
+	# @return [Array]
 	def reduce(operator, *args)
 	    args.reduce([]) do |memo, operand|
 		skip = false
 		memo.map! do |lhs|
 		    next lhs if skip
 		    next lhs if [lhs, operand].map {|a| a.respond_to?(:units) && !!a.units }.uniq.size != 1
+		    next lhs if lhs.zero? || operand.zero?
 		    begin
 			result = lhs.send(operator, operand)
 			if result.is_a?(Numeric)
@@ -172,6 +174,16 @@ class Units
 		    end
 		end
 		skip ? memo : memo.push(operand)
+	    end
+	end
+
+	# Reduce the arguments. If only one operand remains, return it. Otherwise, clone.
+	def reduce_and_clone(*args)
+	    reduced = reduce(*args)
+	    if reduced.length > 1
+		self.class.new(*reduced)
+	    else
+		reduced.first
 	    end
 	end
     end

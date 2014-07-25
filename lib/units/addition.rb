@@ -11,14 +11,32 @@ class Units
 		    self.dup
 		end
 	    else
-		case other
+		reduced = case other
 		    when self.class
-			self.class.new(*reduce(:+, *operands, *other.operands))
+			reduce(*operands, *other.operands)
 		    when Numeric
-			self.class.new(*reduce(:+, *operands, other))
+			reduce(*operands, other)
 		    else
-			self.class.new(*operands, other)
+			[*operands, other]
 		end
+
+		if reduced.length > 1
+		    self.class.new(*reduced)
+		else
+		    reduced.first
+		end
+	    end
+	end
+
+	def -(other)
+	    if other.is_a?(Numeric)
+		reduce_and_clone(*operands, -other)
+	    elsif other.is_a?(self.class)
+		reduce_and_clone(*operands, *other.operands.map {|op| -op})
+	    elsif other.is_a?(Units::Subtraction)
+		reduce_and_clone(*operands, -other.operands.first, *other.operands.drop(1))
+	    else
+		super
 	    end
 	end
 
@@ -53,6 +71,17 @@ class Units
 	    Units::SquareRoot.new(self)
 	end
 	# @endgroup
+
+    private
+	def reduce(*args)
+	    result = super(:+, *args)
+	    if result.length > 1
+		result = result.delete_if {|operand| operand.zero?}
+		result.empty? ? [0] : result
+	    else
+		result
+	    end
+	end
     end
 
     def self.Addition(*args)

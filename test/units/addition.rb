@@ -19,7 +19,14 @@ describe Units::Addition do
     it 'must have a subtraction operator that returns a new proxy' do
 	(subject - 5).must_equal Units::Subtraction.new(subject, 5)
 	(5 - subject).must_equal Units::Subtraction.new(5, 3.meters, 4.inches)
-	(subject - addition).must_equal Units::Subtraction.new(subject, addition)
+    end
+
+    it 'must subtract another Addition that yields a new proxy' do
+	(subject - Units.Addition(4.meters, 9.inches)).must_equal Units.Addition(-1.meters, -5.inches)
+    end
+
+    it 'must subtract another Addition that yields a Numeric' do
+	(subject - addition).must_equal -5.inches
     end
 
     it 'must have a multiplication operator that returns a new proxy' do
@@ -34,8 +41,14 @@ describe Units::Addition do
 	(subject / subject).must_equal Units::Division.new(subject, subject)
     end
 
-    it 'must collapse compatible operands when adding' do
+    it 'must collapse like units when adding Units' do
 	(subject + 5.inches).must_equal Units.Addition(3.meters, 9.inches)
+	(Units::Addition.new(20.cm, 20.mm) + 10.mm).must_equal Units::Addition.new(20.cm, 30.mm)
+    end
+
+    it 'must collapse like units when subtracting Units' do
+	(Units::Addition.new(20.cm, 20.mm) - 10.mm).must_equal Units::Addition.new(20.cm, 10.mm)
+	(Units::Addition.new(20.cm, 20.mm) - 20.mm).must_equal 20.cm
     end
 
     it 'must spaceship with a regular Numeric' do
@@ -111,7 +124,7 @@ describe Units::Addition do
 	end
 
 	it 'must subtract a subtraction' do
-	    (subject - subtraction).must_equal Units::Subtraction.new(subject, subtraction)
+	    (subject - subtraction).must_equal Units.Addition(4.inches, 4.meters)
 	end
 
 	it 'must multiply by a subtraction' do
