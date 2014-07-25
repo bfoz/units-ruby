@@ -8,6 +8,7 @@ class Units
 
 	def initialize(*args)
 	    raise ArgumentError, "Can't initialize #{self.class} without arguments" if args.empty?
+	    @conversion_cache = {}
 	    @operands = Array(args)
 	end
 
@@ -120,16 +121,21 @@ class Units
 	# @param units [Unit]	the desired {Unit}s to convert to
 	# @return [Number]  the result of the proxied operation
 	def convert_to(units)
-	    operands.map {|operand| operand.to(units) rescue operand }.reduce(operator)
+	    @conversion_cache[units] ||= operands.map {|operand| operand.to(units) rescue operand }.reduce(operator)
 	end
 	alias :to :convert_to
 
 	# @!attribute units
 	#   @return [Unit]  a {Unit} randomly-selected from the operands
 	def units
-	    # Randomly choose the first available unit
-	    f = operands.find {|op| op.respond_to? :units}
-	    f && f.units
+	    # Use something that's already been cached, if possible. Otherwise,
+	    #  randomly choose the first available unit.
+	    if @conversion_cache.empty?
+		f = operands.find {|op| op.respond_to? :units}
+		f && f.units
+	    else
+		@conversion_cache.first.first
+	    end
 	end
 
 	# This is meant to be called from subclasses, but won't explode if called directly
