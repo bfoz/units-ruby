@@ -11,11 +11,26 @@ class Units
 	    @operands = Array(args)
 	end
 
+	# Returns true if both operands be of the same class and in the same order
 	def eql?(other)
-	    return zero? if (other == 0)
-	    other.is_a?(self.class) && (operands == other.operands)
+	    return zero? if other.zero?
+	    other.is_a?(self.class) && (operands.eql? other.operands)
 	end
-	alias :== :eql?
+
+	# Returns true if both operands are of the same class and convert to the same value
+	def ==(other)
+	    return zero? if other.zero?
+	    return false unless other.is_a?(self.class)
+	    return true if operands == other.operands
+
+	    # If the operands aren't exactly equal, try converting
+	    # them both to some unit and then do the comparison
+
+	    # Randomly choose the first unit of self
+	    target_unit = units || other.units
+
+	    self.to(target_unit) == other.to(target_unit)
+	end
 
 	def <=>(other)
 	    case other
@@ -31,7 +46,7 @@ class Units
 			# them both to some unit and then do the comparison
 
 			# Randomly choose the first unit of self
-			target_unit = units
+			target_unit = units || other.units
 
 			self.to(target_unit) <=> other.to(target_unit)
 		    end
@@ -112,7 +127,9 @@ class Units
 	# @!attribute units
 	#   @return [Unit]  a {Unit} randomly-selected from the operands
 	def units
-	    operands.first.units    # Randomly choose the first available unit
+	    # Randomly choose the first available unit
+	    f = operands.find {|op| op.respond_to? :units}
+	    f && f.units
 	end
 
 	# This is meant to be called from subclasses, but won't explode if called directly

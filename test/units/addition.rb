@@ -75,6 +75,10 @@ describe Units::Addition do
 	(arg0 <=> arg1).must_equal 1
     end
 
+    it 'must compare equal regardless of order' do
+	(Units.Addition(10.cm, 6.mm) == Units.Addition(6.mm, 10.cm)).must_equal true
+    end
+
     describe 'when operating on zero' do
 	it 'must not add zero' do
 	    (subject + 0).must_equal subject
