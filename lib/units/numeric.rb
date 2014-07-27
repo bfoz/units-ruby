@@ -8,6 +8,7 @@ class Units
 	attr_reader :units, :value
 
 	def initialize(value, units=nil)
+	    raise ArgumentError, "Numeric can't be initialized with a #{value.class} : #{value}" unless value.is_a?(::Numeric)
 	    @value = value
 	    @units = (units.is_a?(Units) ? units : Units.new(units)) if units
 	end

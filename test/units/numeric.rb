@@ -34,6 +34,10 @@ describe Units::Numeric do
 	    Units::Numeric.new(1).must_equal 1
 	    Units::Numeric.new(1, :meter).must_equal one_meter
 	end
+
+	it 'must reject a non-Numeric' do
+	    ->{ Units::Numeric.new('string') }.must_raise ArgumentError
+	end
     end
 
     describe "equality" do
