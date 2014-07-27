@@ -63,6 +63,10 @@ describe Units::Addition do
 	(Units::Addition.new(15.meters, 20.inches) <=> 5.inches).must_equal 1
     end
 
+    it 'must reverse spaceship with a Numeric that has units' do
+	(1000.inches <=> Units::Addition.new(20.inches, 15.meters)).must_equal 1
+    end
+
     it 'must spaceship with an exactly equal operator' do
 	arg0 = 9.mm + (Rational(-9, 2).cm - 2.25.mm)
 	arg1 = 9.mm + (Rational(-9, 2).cm - 2.25.mm)

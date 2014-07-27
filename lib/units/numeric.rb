@@ -101,6 +101,8 @@ class Units
 		end
 	    elsif other.respond_to? :map
 		other.map {|a| self.send(:<=>, a)}
+	    elsif Units::Operator
+		-(other <=> @value)
 	    else
 		@value <=> other
 	    end
