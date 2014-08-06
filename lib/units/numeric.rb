@@ -77,15 +77,32 @@ class Units
 	# However, 0.units == 0 is a special case to avoid breaking any conditionals
 	# that attempt to avoid dividing by zero
 	def eql?(other)
-	    if other.respond_to?(:units)
-		(@units == other.units) and (@value == (other.respond_to?(:value) ? other.value : other))
-	    elsif other == 0
-		@value == other
+	    if other.zero?
+		@value.zero?
+	    elsif other.respond_to?(:units)
+		if other.respond_to? :value
+		    @units.eql?(other.units) and @value.eql?(other.value)
+		else
+		    other == self
+		end
 	    else
-		(@units == nil) and (@value == other)
+		@units.nil? and @value.eql?(other)
 	    end
 	end
-	alias == eql?
+
+	def ==(other)
+	    if other.zero?
+		@value.zero?
+	    elsif other.respond_to?(:units)
+		if other.respond_to?(:value)
+		    (@units == other.units) and (@value == other.value)
+		else
+		    other == self
+		end
+	    else
+		@units.nil? and (@value == other)
+	    end
+	end
 
 	def <=>(other)
 	    if other.kind_of? Numeric
@@ -106,6 +123,14 @@ class Units
 	    else
 		@value <=> other
 	    end
+	end
+
+	# @note This method is defined here, instead of relying on method_missing,
+	#  because the default implementation of Numeric#zero? passes the call
+	#  to #==, which is rather heavy for what little needs to be done here.
+	#  This is purely a matter of optimization; but it shaved quite a few cycles.
+	def zero?
+	    @value.zero?
 	end
 
 	# @group Arithmetic
@@ -160,7 +185,6 @@ class Units
 	# @param units [Units]	the desired units to convert to
 	# @return [Numeric]
 	def convert_to(units)
-	    units = units.is_a?(Units) ? units : Units.new(units)
 	    raise UnitsError, "Can't convert '#{@units}' to: #{units}" unless @units.valid_conversion?(units)
 	    return self if @units == units
 	    self.class.new(@units.convert(@value, units), units)

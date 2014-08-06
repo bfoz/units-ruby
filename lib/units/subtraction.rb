@@ -8,7 +8,7 @@ class Units
 		if 1 == operands.size
 		    operands.first
 		else
-		    self.dup
+		    self
 		end
 	    elsif self == other
 		0
@@ -52,7 +52,7 @@ class Units
 
 	# @group Math
 	def sqrt
-	    Units::SquareRoot.new(self)
+	    @sqrt ||= Units::SquareRoot.new(self)
 	end
 	# @endgroup
 

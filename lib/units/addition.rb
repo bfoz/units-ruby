@@ -8,23 +8,14 @@ class Units
 		if 1 == operands.size
 		    operands.first
 		else
-		    self.dup
+		    self
 		end
+	    elsif other.is_a? self.class
+		reduce_and_clone(*operands, *other.operands)
+	    elsif other.is_a? Numeric
+		reduce_and_clone(*operands, other)
 	    else
-		reduced = case other
-		    when self.class
-			reduce(*operands, *other.operands)
-		    when Numeric
-			reduce(*operands, other)
-		    else
-			[*operands, other]
-		end
-
-		if reduced.length > 1
-		    self.class.new(*reduced)
-		else
-		    reduced.first
-		end
+		self.class.new(*operands, other)
 	    end
 	end
 
@@ -68,7 +59,7 @@ class Units
 
 	# @group Math
 	def sqrt
-	    Units::SquareRoot.new(self)
+	    @sqrt ||= Units::SquareRoot.new(self)
 	end
 	# @endgroup
 

@@ -91,9 +91,8 @@ class Units
 	end
 
 	def *(other)
-	    return other if other.zero?
-	    operands.map {|operand| operand * other }
-		    .reduce {|result, operand| result.send(operator, operand)}
+	    return 0 if other.zero?
+	    operands.map {|operand| operand * other }.reduce(operator)
 	end
 
 	def /(other)
@@ -130,11 +129,15 @@ class Units
 	def units
 	    # Use something that's already been cached, if possible. Otherwise,
 	    #  randomly choose the first available unit.
-	    if @conversion_cache.empty?
-		f = operands.find {|op| op.respond_to? :units}
-		f && f.units
+	    if @units
+		@units
 	    else
-		@conversion_cache.first.first
+		if @conversion_cache.empty?
+		    f = operands.find {|op| op.respond_to? :units}
+		    @units = f && f.units
+		else
+		    @units = @conversion_cache.first.first
+		end
 	    end
 	end
 
@@ -160,7 +163,7 @@ class Units
 	end
 
 	def zero?
-	    operands.all? {|operand| operand.zero? }
+	    @zero ||= operands.all? {|operand| operand.zero? }
 	end
 	# @endgroup
 
