@@ -8,7 +8,7 @@ describe Units::Subtraction do
     it 'must have an addition operator that returns a new proxy' do
 	(subject + 5).must_equal Units::Addition.new(subject, 5)
 	(5 + subject).must_equal Units::Addition.new(5, subject)
-	(subject + subject).must_equal Units::Addition.new(subject, subject)
+	(subject + subject).must_equal Units::Subtraction.new(6.meters, 8.inch)
     end
 
     it 'must have a subtraction operator that returns a new proxy' do

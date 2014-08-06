@@ -3,6 +3,21 @@ require_relative 'division'
 
 class Units
     class Subtraction < Operator
+	def +(other)
+	    if other.is_a? Units::Addition
+		# (a - b) + (c + d) => (c + d) + (a - b)
+		other + self
+	    elsif other.is_a? Units::Subtraction
+		# (a - b) + (c - d) => a - b - (-c) - d
+		reduce_and_clone(*operands, -other.operands.first, *other.operands.drop(1))
+	    elsif other.is_a? Numeric
+		# (a - b) + c => a - b - (-c)
+		reduce_and_clone(*operands, -other)
+	    else
+		super other
+	    end
+	end
+
 	def -(other)
 	    if other.zero?
 		if 1 == operands.size
