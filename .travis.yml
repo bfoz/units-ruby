@@ -1,1 +1,9 @@
 script: bundle exec rake test
+deploy:
+  provider: rubygems
+  api_key:
+    secure: dJNT+JDw3l59yc1hv1bJhscVq0lBfnesyd2kS1k0iQ53EFG7qjPWLeTw74FdHwiVP7rSSrv+VfXVx0aOdAw7meLsi8SW/naJqe/NoAhRks0q7un4H+l50Xr/ijkVmxwOqLEAllOnLiWa9QNuZf8l55PR7gKvGKPXhItsew9IpoA=
+  gem: units
+  on:
+    tags: true
+    repo: bfoz/units-ruby
