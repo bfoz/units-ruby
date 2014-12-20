@@ -1,23 +1,5 @@
 module UnitsMixin
     attr_reader :units	# Returns the Units object
-    
-    def self.included(base)
-	# Patch the including class to intercept various operators
-	base.instance_eval do
-	    alias_method :unitsmethods_original_equality, :==
-	    alias_method :==, :equality
-	    alias_method :unitsmethods_original_addition, :+
-	    alias_method :+, :add
-	    alias_method :unitsmethods_original_subtraction, :-
-	    alias_method :-, :subtract
-	    alias_method :unitsmethods_original_multiply, :*
-	    alias_method :*, :multiply
-	    alias_method :unitsmethods_original_division, :/
-	    alias_method :/, :divide
-	    alias_method :unitsmethods_original_exponent, :**
-	    alias_method :**, :exponent
-	end
-    end
 
     # FIXME Get rid of this method. Changing units shouldn't be allowed.
     def units=(args)
@@ -33,23 +15,23 @@ module UnitsMixin
 
     # Both value and units must match for two numbers to be considered equal
     #  ie. 3.meters != 3.inches != 3
-    def equality(other)
+    def ==(other)
 	other_units = units_for_other(other)
 	if @units and other_units
-	    (@units == other_units) and unitsmethods_original_equality(other)
+	    (@units == other_units) and super(other)
 	elsif @units or other_units
 	    false
 	else
-	    unitsmethods_original_equality(other)
+	    super(other)
 	end
     end
 
-    def add(other)
+    def +(other)
 	if other.is_a? Units::Operator
 	    Units.Addition(self) + other
 	else
 	    begin
-		result = self.unitsmethods_original_addition(value_for_other(other))
+		result = super(value_for_other(other))
 		apply_result_units(result, units_op(:+, units_for_other(other)))
 	    rescue UnitsError
 		Units.Addition(self, other)
@@ -57,12 +39,12 @@ module UnitsMixin
 	end
     end
 
-    def subtract(other)
+    def -(other)
 	if other.is_a? Units::Operator
 	    Units.Subtraction(self, other)
 	else
 	    begin
-		result = self.unitsmethods_original_subtraction(value_for_other(other))
+		result = super(value_for_other(other))
 		apply_result_units(result, units_op(:-, units_for_other(other)))
 	    rescue UnitsError
 		Units.Subtraction(self, other)
@@ -70,20 +52,20 @@ module UnitsMixin
 	end
     end
 
-    def multiply(other)
+    def *(other)
 	if other.is_a? Units::Operator
 	    other * self
 	else
-	    result = unitsmethods_original_multiply(value_for_other(other))
+	    result = super(value_for_other(other))
 	    apply_result_units(result, units_op(:*, units_for_other(other)))
 	end
     end
 
-    def divide(other)
+    def /(other)
 	if other.is_a? Units::Operator
 	    Units::Division.new(self, other)
 	else
-	    result = unitsmethods_original_division(value_for_other(other))
+	    result = super(value_for_other(other))
 
 	    other_units = units_for_other(other)
 	    if @units and other_units
@@ -99,8 +81,8 @@ module UnitsMixin
 	end
     end
 
-    def exponent(power)
-	result = unitsmethods_original_exponent(power)
+    def **(power)
+	result = super(power)
 	apply_result_units(result, units ? (units ** power) : nil)
     end
 

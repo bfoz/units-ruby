@@ -67,7 +67,7 @@ class Units
 		when Fixnum then [self.class.new(other), self]
 		when Float  then [self.class.new(other), self]
 		else
-		    other.class.send(:include, UnitsMixin) unless other.kind_of?(UnitsMixin)
+		    other.class.send(:prepend, UnitsMixin) unless other.kind_of?(UnitsMixin)
 		    [other, self]
 	    end
 	end

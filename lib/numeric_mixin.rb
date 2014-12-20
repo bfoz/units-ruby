@@ -23,7 +23,7 @@ module NumericMixin
 		#  Numeric's subclasses are patched here, instead of at load-time,
 		#  to automatically support any future Numeric subclasses without
 		#  requiring changes to this module
-		self.class.send(:include, UnitsMixin) unless self.kind_of?(UnitsMixin)
+		self.class.send(:prepend, UnitsMixin) unless self.kind_of?(UnitsMixin)
 		@units = units
 		self
 	    end
