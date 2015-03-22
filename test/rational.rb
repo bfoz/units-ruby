@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require 'units/numeric'
+require 'units'
 
 describe Rational do
     subject { Rational(10,2).meters }
