@@ -18,11 +18,11 @@ describe Units::SquareRoot do
     end
 
     it 'must add' do
-	(subject + 5).must_equal Units.Addition(subject, 5)
+	(subject + 5.meters).must_equal Units.Addition(subject, 5.meters)
     end
 
     it 'must subtract' do
-	(subject - 5).must_equal Units.Subtraction(subject, 5)
+	(subject - 5.meters).must_equal Units.Subtraction(subject, 5.meters)
     end
 
     it 'must multiply' do

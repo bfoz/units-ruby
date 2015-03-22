@@ -5,18 +5,21 @@ describe Units::Subtraction do
     subject { Units::Subtraction.new(3.meters, 4.inches) }
     let(:subtraction) { Units.Subtraction(5.meters, 6.foot) }
 
+    it 'must reject addition without units' do
+	->{ subject + 5 }.must_raise UnitsError
+	->{ 5 + subject }.must_raise UnitsError
+    end
+
+    it 'must reject subtraction without units' do
+	->{ subject - 5 }.must_raise UnitsError
+	->{ 5 - subject }.must_raise UnitsError
+    end
+
     it 'must have an addition operator that returns a new proxy' do
-	(subject + 5).must_equal Units::Addition.new(subject, 5)
-	(5 + subject).must_equal Units::Addition.new(5, subject)
 	(subject + subject).must_equal Units::Subtraction.new(6.meters, 8.inch)
     end
 
     it 'must have a subtraction operator that returns a new proxy' do
-	(subject - 5).must_equal Units::Subtraction.new(3.meters, 4.inches, 5)
-	(5 - subject).must_equal Units::Subtraction.new(5, 3.meters, -4.inches)
-    end
-
-    it 'must subtract another Subtraction that yields a new proxy' do
 	(subject - subtraction).must_equal Units::Subtraction.new(-2.meters, 4.inches, -6.foot)
     end
 

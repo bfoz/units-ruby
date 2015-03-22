@@ -134,6 +134,11 @@ class Units
 	end
 
 	# @group Arithmetic
+
+	def -@
+	    self.class.new(-value, units)
+	end
+
 	def +(other)
 	    return other if self.zero?
 	    return self if other.zero?
@@ -199,11 +204,25 @@ class Units
 	def op(sym, other)
 	    if other.kind_of? Numeric
 		begin
-		    result_units = @units ? @units.send(sym, other.units) : ((:/ == sym) && (0 == @value) ? nil : other.units)
+		    result_units = if @units
+			@units.send(sym, other.units)
+		    elsif (:/ == sym) && (0 == @value)
+			nil
+		    elsif other.units && ((:+ == sym) || (:- == sym))
+			raise UnitsError
+		    else
+			other.units
+		    end
 		rescue UnitsError
 		    case sym
 			when :+ then Units::Addition.new(self, other)
-			when :- then Units::Subtraction.new(self, other)
+			when :-
+			    # If self is zero, then don't bother creating a Subtraction proxy
+			    if value.zero?
+				-other
+			    else
+				Units::Subtraction.new(self, other)
+			    end
 		    end
 		else
 		    self.class.new(@value.send(sym, other.value), result_units)

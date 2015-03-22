@@ -3,6 +3,11 @@ require_relative 'square_root'
 
 class Units
     class Addition < Operator
+	def initialize(*args)
+	    raise UnitsError, "All arguments to #{self.class} must have units" unless args.all? {|a| a.zero? || (a.respond_to?(:units) && a.units) }
+	    super
+	end
+
 	def +(other)
 	    if other.zero?
 		if 1 == operands.size

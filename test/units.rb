@@ -140,6 +140,14 @@ describe Units do
 	it "should divide by nil" do
 	    (meter / nil).must_equal meter
 	end
+
+	it 'must reject addition without units' do
+	    ->{ meter + nil }.must_raise UnitsError
+	end
+
+	it 'must reject subtraction without units' do
+	    ->{ meter - nil }.must_raise UnitsError
+	end
     end
 
     describe "comparison" do
@@ -176,7 +184,7 @@ describe Units do
 	end
 
 	it 'must convert degrees to radians' do
-	    90.degrees.radians.must_be_close_to Math::PI/2
+	    90.degrees.radians.must_be_close_to (Math::PI/2).radians
 	end
     end
 

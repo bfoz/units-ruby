@@ -193,13 +193,15 @@ class Units
     end
 
     def +(other)
-	raise UnitsError, "Addition requires matching units: #{self} != #{other}" unless (self == other) || !other
+	raise UnitsError, "Addition requires matching units: #{self} != #{other}" unless (self == other)
 	self.class.new(@units)
     end
+
     def -(other)
-	raise UnitsError, "Subtraction requires matching units: #{self} != #{other}" unless (self == other) || !other
+	raise UnitsError, "Subtraction requires matching units: #{self} != #{other}" unless (self == other)
 	self.class.new(@units)
     end
+
     def *(other)
 	self.class.new(@units.merge(other ? other.units : {}) {|k, left, right| left + right })
     end

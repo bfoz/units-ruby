@@ -30,8 +30,11 @@ describe Units::Numeric do
 	    lambda { Units::Numeric.new }.must_raise(ArgumentError)
 	end
 
-	it "should accept a Unit, but not require it" do
+	it 'must not require a Unit' do
 	    Units::Numeric.new(1).must_equal 1
+	end
+
+	it 'must accept a Unit argument' do
 	    Units::Numeric.new(1, :meter).must_equal one_meter
 	end
 
@@ -109,15 +112,6 @@ describe Units::Numeric do
     end
 
     describe "coerced arithmetic" do
-	it "addition" do
-	    (4 + three_meters).must_equal seven_meters
-	end
-
-	it "subtraction" do
-	    (4 - three_meters).must_equal one_meter
-	    (0 - four_meters).must_equal -four_meters
-	end
-
 	it "multiplication" do
 	    (4 * three_meters).must_equal twelve_meters
 	end
@@ -132,10 +126,25 @@ describe Units::Numeric do
 	it "must divide a Rational" do
 	    (Rational(2,1) / one_meter).must_equal Rational(2,1).meters(-1)
 	end
-
     end
 
     describe "integer arithmetic with normal literals" do
+	it 'must reject addition' do
+	    ->{ 4 + three_meters }.must_raise UnitsError
+	end
+
+	it 'must reject subtraction' do
+	    ->{ 4 - three_meters }.must_raise UnitsError
+	end
+
+	it 'must allow addition with zero' do
+	    (0 + four_meters).must_equal four_meters
+	end
+
+	it 'must allow subtraction from zero' do
+	    (0 - four_meters).must_equal -four_meters
+	end
+
 	it "should support multiplication" do
 	    (three_meters * 4).must_equal twelve_meters
 	    (three_meters * four).must_equal twelve_meters
@@ -148,14 +157,14 @@ describe Units::Numeric do
     end
 
     describe "arithmetic with mixed units" do
-	it "should allow addition of valid units and no units" do
-	    (three_meters + four).must_equal seven_meters
-	    (four + three_meters).must_equal seven_meters
+	it 'must reject addition of valid units and no units' do
+	    ->{ three_meters + four }.must_raise UnitsError
+	    ->{ four + three_meters }.must_raise UnitsError
 	end
 
-	it "should allow subtraction of valid units and no units" do
-	    (three_meters - three).must_equal 0.meters
-	    (three - three_meters).must_equal 0.meters
+	it 'must reject subtraction without units' do
+	    ->{ three_meters - three }.must_raise UnitsError
+	    ->{ three - three_meters }.must_raise UnitsError
 	end
 
 	it 'must return a proxy object when adding mixed units' do

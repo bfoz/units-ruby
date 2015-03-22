@@ -6,14 +6,10 @@ describe Units::Division do
     let(:division) { Units::Division.new(4.meters, 5.inches) }
 
     it 'must have an addition operator that returns a new proxy' do
-	(subject + 5).must_equal Units::Addition.new(subject, 5)
-	(5 + subject).must_equal Units::Addition.new(5, subject)
 	(subject + subject).must_equal Units::Addition.new(subject, subject)
     end
 
     it 'must have a subtraction operator that returns a new proxy' do
-	(subject - 5).must_equal Units::Subtraction.new(subject, 5)
-	(5 - subject).must_equal Units::Subtraction.new(5, subject)
 	(subject - division).must_equal Units::Subtraction.new(subject, division)
     end
 
