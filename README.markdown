@@ -5,12 +5,6 @@ Units for Ruby
 
 An extension to Ruby's Numeric classes that adds support for units of measure.
 
-License
--------
-
-Copyright 2012-2014 Brandon Fosdick <bfoz@bfoz.net> and released under the BSD
-license.
-
 Examples
 --------
 
@@ -166,3 +160,9 @@ to learn about all of these bizare units and their namesakes.
 - quart
 - barell
 - hogshead
+
+License
+-------
+
+Copyright 2012-2015 Brandon Fosdick <bfoz@bfoz.net> and released under the BSD
+license.
