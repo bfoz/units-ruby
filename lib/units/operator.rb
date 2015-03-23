@@ -104,6 +104,7 @@ class Units
 	    case other
 		when Fixnum, Float then [Units::Numeric.new(other), self]
 		else
+		    other.singleton_class.send(:prepend, UnitsMixin) unless other.kind_of?(UnitsMixin)
 		    [other, self]
 	    end
 	end
