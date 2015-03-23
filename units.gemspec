@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = "units"
-    s.version     = '3'
+    s.version     = '3.0.1'
   s.authors     = ["Brandon Fosdick"]
   s.email       = ["bfoz@bfoz.net"]
   s.homepage    = 'http://github.com/bfoz/units-ruby'
