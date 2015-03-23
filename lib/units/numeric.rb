@@ -171,8 +171,6 @@ class Units
 	end
 
 	def /(other)
-	    return self if self.zero?
-
 	    case other
 		when Units::Operator	then Units::Division.new(self, other)
 		else op(:/, other)
